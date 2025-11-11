@@ -15,9 +15,9 @@ RUN apt-get update -qq && apt-get install -y postgresql-client
 
 RUN mkdir /enviroment_to_try
 WORKDIR /enviroment_to_try
-# COPY Gemfile /enviroment_to_try/
-# COPY Gemfile.lock /enviroment_to_try/
-# RUN bundle install
+COPY Gemfile /enviroment_to_try/
+COPY Gemfile.lock /enviroment_to_try/
+RUN bundle install
 # COPY package.json yarn.lock ./
 # COPY package.json ./
 # RUN yarn install
