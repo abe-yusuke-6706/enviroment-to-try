@@ -5,7 +5,7 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   server: {
-    host: '0.0.0.0',  // コンテナ外部からアクセス可能にする
-    port: 5173,        // デフォルト Vite ポート
+    host: '0.0.0.0', 
+    port: 5173,
   },
 })
