@@ -1,32 +1,51 @@
-import Checkbox from "@/Components/Checkbox";
-import InputError from "@/Components/InputError";
-import InputLabel from "@/Components/InputLabel";
-import PrimaryButton from "@/Components/PrimaryButton";
-import TextInput from "@/Components/TextInput";
+import Checkbox from "@/components/Checkbox";
+import InputError from "@/components/InputError";
+import InputLabel from "@/components/InputLabel";
+import PrimaryButton from "@/components/PrimaryButton";
+import TextInput from "@/components/TextInput";
 // import GuestLayout from '@/Layouts/GuestLayout';
 import MainLayout from "@/Layouts/MainLayout";
-import { Head, Link, useForm } from "@inertiajs/react";
+// import { Head, Link, useForm } from "@inertiajs/react";
+import { useState, useRef } from "react";
+// interface LoginProps {
+//     status?: string,
+// }
+import type { focusRefProps } from "@/components/TextInput";
 
-export default function Login({ status, canResetPassword }) {
-    const { data, setData, post, processing, errors, reset } = useForm({
+export default function Login({ status }: { status?: string }) {
+    // const { data, setData, post, processing, errors, reset } = useForm({
+    //     email: "",
+    //     password: "",
+    //     remember: false,
+    // });
+
+    interface formDataInterface {
+        email: string,
+        password: string,
+        remember: boolean
+    }
+
+    const [data, setData] = useState<formDataInterface>({
         email: "",
         password: "",
         remember: false,
-    });
+    })
 
-    const submit = (e) => {
+    const submit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        post(route("login"), {
-            onFinish: () => reset("password"),
-        });
+        // post(route("login"), {
+        //     onFinish: () => reset("password"),
+        // });
     };
+
+    const emailRef = useRef<focusRefProps>(null);
 
     return (
         <MainLayout>
             <div className="flex min-h-screen flex-col items-center pt-6 sm:justify-center sm:pt-0">
                 <div className="mt-6 w-full overflow-hidden bg-white px-6 py-4 shadow-md sm:max-w-md sm:rounded-lg">
-                    <Head title="ログイン" />
+                    {/* <Head title="ログイン" /> */}
 
                     {status && (
                         <div className="mb-4 text-sm font-medium text-green-600">
@@ -49,15 +68,16 @@ export default function Login({ status, canResetPassword }) {
                                 className="mt-1 block w-full"
                                 autoComplete="username"
                                 isFocused={true}
-                                onChange={(e) =>
-                                    setData("email", e.target.value)
-                                }
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                                    setData((data) => ({ ...data, remember: e.target.checked })
+                                )}
+                                ref={emailRef}
                             />
 
-                            <InputError
+                            {/* <InputError
                                 message={errors.email}
                                 className="mt-2"
-                            />
+                            /> */}
                         </div>
 
                         <div className="mt-4">
@@ -70,15 +90,15 @@ export default function Login({ status, canResetPassword }) {
                                 value={data.password}
                                 className="mt-1 block w-full"
                                 autoComplete="current-password"
-                                onChange={(e) =>
-                                    setData("password", e.target.value)
-                                }
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                                    setData((data) => ({ ...data, remember: e.target.checked })
+                                )}
                             />
 
-                            <InputError
+                            {/* <InputError
                                 message={errors.password}
                                 className="mt-2"
-                            />
+                            /> */}
                         </div>
 
                         <div className="mt-4 block">
@@ -86,9 +106,9 @@ export default function Login({ status, canResetPassword }) {
                                 <Checkbox
                                     name="remember"
                                     checked={data.remember}
-                                    onChange={(e) =>
-                                        setData("remember", e.target.checked)
-                                    }
+                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                                        setData((data) => ({ ...data, remember: e.target.checked })
+                                        )}
                                 />
                                 <span className="ms-2 text-sm text-gray-600">
                                     Remember me
@@ -97,18 +117,10 @@ export default function Login({ status, canResetPassword }) {
                         </div>
 
                         <div className="mt-4 flex items-center justify-end">
-                            {/* {canResetPassword && (
-                        <Link
-                            href={route('password.request')}
-                            className="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                        >
-                            Forgot your password?
-                        </Link>
-                    )} */}
 
                             <PrimaryButton
                                 className="ms-4"
-                                disabled={processing}
+                            // disabled={processing}
                             >
                                 ログイン
                             </PrimaryButton>

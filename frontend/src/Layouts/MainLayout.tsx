@@ -30,7 +30,7 @@ const MainLayout: FC<MainLayoutProps> = ({ children }) => {
         <div>
             {/* ヘッダー */}
             <Box
-                background="red.500"
+                background="gray.700"
                 width="100%"
                 h="100px"
                 pr="4"
@@ -131,7 +131,7 @@ const MainLayout: FC<MainLayoutProps> = ({ children }) => {
             {/* メイン */}
             <Box
                 minH="100vh"
-                bgImage={`url(../background_image.jpg)`}
+                // bgImage={`url(../background_image.jpg)`}
                 bgSize="cover"
                 // bgPosition="center"
                 bgRepeat="no-repeat"
@@ -143,7 +143,7 @@ const MainLayout: FC<MainLayoutProps> = ({ children }) => {
 
             {/* フッター */}
             <Box
-                background="red.500"
+                background="gray.700"
                 width="100%"
                 h="100px"
                 padding="4"
