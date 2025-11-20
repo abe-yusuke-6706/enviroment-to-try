@@ -4,10 +4,7 @@ import MainLayout from "../Layouts/MainLayout";
 const Home = () => {
     return (
         <>
-            <div>Home</div>
-            <h1>ああ</h1>
-            <p>ssss</p>
-            <p>sss</p>
+            <div>ログイン完了後画面</div>
         </>
     )
 }

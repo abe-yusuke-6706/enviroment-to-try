@@ -1,16 +1,20 @@
 import Checkbox from "@/components/Checkbox";
-import InputError from "@/components/InputError";
+// import InputError from "@/components/InputError";
 import InputLabel from "@/components/InputLabel";
-import PrimaryButton from "@/components/PrimaryButton";
+// import PrimaryButton from "@/components/PrimaryButton";
 import TextInput from "@/components/TextInput";
 // import GuestLayout from '@/Layouts/GuestLayout';
 import MainLayout from "@/Layouts/MainLayout";
 // import { Head, Link, useForm } from "@inertiajs/react";
-import { useState, useRef } from "react";
+import { useState } from "react";
 // interface LoginProps {
 //     status?: string,
 // }
-import type { focusRefProps } from "@/components/TextInput";
+// import type { focusRefProps } from "@/components/TextInput";
+import type { SignInParams } from "@/interfaces/auth";
+import { Button } from "@chakra-ui/react";
+import { signIn } from "@/lib/api/auth";
+import { useNavigate } from "react-router-dom";
 
 export default function Login({ status }: { status?: string }) {
     // const { data, setData, post, processing, errors, reset } = useForm({
@@ -19,27 +23,45 @@ export default function Login({ status }: { status?: string }) {
     //     remember: false,
     // });
 
-    interface formDataInterface {
-        email: string,
-        password: string,
-        remember: boolean
-    }
+    const navigate = useNavigate()
 
-    const [data, setData] = useState<formDataInterface>({
-        email: "",
-        password: "",
-        remember: false,
-    })
+    const [email, setEmail] = useState<string>("")
+    const [password, setPassword] = useState<string>("")
+    const [remember, setRemember] = useState<boolean>(false)
 
-    const submit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
 
-        // post(route("login"), {
-        //     onFinish: () => reset("password"),
-        // });
-    };
+        try {
+            const formData: SignInParams = {
+                email: email,
+                password: password,
+                remember: remember,
+            }
 
-    const emailRef = useRef<focusRefProps>(null);
+            const res = await signIn(formData);
+            console.log(res)
+
+            if (res.status == 200) {
+                navigate("/test")
+            } else {
+                console.log("ログイン失敗")
+            }
+
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+    // const submit = (e: React.FormEvent<HTMLFormElement>) => {
+    //     e.preventDefault();
+
+    //     // post(route("login"), {
+    //     //     onFinish: () => reset("password"),
+    //     // });
+    // };
+
+    // const emailRef = useRef<focusRefProps>(null);
 
     return (
         <MainLayout>
@@ -53,7 +75,7 @@ export default function Login({ status }: { status?: string }) {
                         </div>
                     )}
 
-                    <form onSubmit={submit}>
+                    <form>
                         <div>
                             <InputLabel
                                 htmlFor="email"
@@ -64,14 +86,14 @@ export default function Login({ status }: { status?: string }) {
                                 id="email"
                                 type="email"
                                 name="email"
-                                value={data.email}
+                                value={email}
                                 className="mt-1 block w-full"
                                 autoComplete="username"
                                 isFocused={true}
                                 onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                                    setData((data) => ({ ...data, remember: e.target.checked })
-                                )}
-                                ref={emailRef}
+                                    setEmail(e.target.value)
+                                }
+                            // ref={emailRef}
                             />
 
                             {/* <InputError
@@ -87,12 +109,12 @@ export default function Login({ status }: { status?: string }) {
                                 id="password"
                                 type="password"
                                 name="password"
-                                value={data.password}
+                                value={password}
                                 className="mt-1 block w-full"
                                 autoComplete="current-password"
                                 onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                                    setData((data) => ({ ...data, remember: e.target.checked })
-                                )}
+                                    setPassword(e.target.value)
+                                }
                             />
 
                             {/* <InputError
@@ -105,10 +127,10 @@ export default function Login({ status }: { status?: string }) {
                             <label className="flex items-center">
                                 <Checkbox
                                     name="remember"
-                                    checked={data.remember}
+                                    checked={remember}
                                     onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                                        setData((data) => ({ ...data, remember: e.target.checked })
-                                        )}
+                                        setRemember(e.target.checked)
+                                    }
                                 />
                                 <span className="ms-2 text-sm text-gray-600">
                                     Remember me
@@ -118,12 +140,13 @@ export default function Login({ status }: { status?: string }) {
 
                         <div className="mt-4 flex items-center justify-end">
 
-                            <PrimaryButton
+                            <Button
                                 className="ms-4"
+                                onClick={handleSubmit}
                             // disabled={processing}
                             >
                                 ログイン
-                            </PrimaryButton>
+                            </Button>
                         </div>
                     </form>
                 </div>
