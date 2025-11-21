@@ -16,6 +16,7 @@ default: &default
   username: user
   password: password
   host: db
+  allow_public_key_retrieval: true
 
 development:
   <<: *default
