@@ -10,6 +10,8 @@ Rails.application.routes.draw do
       namespace :auth do
         resources :sessions, only: %i[index]
       end
+
+      resources :products, only: %i[index show create update destroy]
     end
   end
 
