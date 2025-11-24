@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
     Box,
     Image,
@@ -17,26 +17,56 @@ import {
     VStack,
 } from "@chakra-ui/react";
 // import { usePage } from "@inertiajs/react";
-import MainLayout from "../../Layouts/MainLayout";
+import MainLayout from "@/Layouts/MainLayout";
 // import { StarIcon } from "@chakra-ui/icons";
 import Pagination from "@mui/material/Pagination";
-import type { ProductProps } from "@/interfaces/post";
 import { Link } from "react-router-dom";
-import type { ChangeEvent } from "react";
+import axios from "axios";
+import type { Product } from "@/interfaces/product";
+// import client from "@/lib/api/client";
+// import { getProducts } from "@/lib/api/product";
 
-const Index = ({ products }: ProductProps) => {
+const Index = () => {
+    const [items, setItems] = useState<Product[]>([]);
+
+    // try {
+    //     setItems<ProductProps>(awaitgetProducts().data);
+    // } catch (error) {
+    //     console.log(error);
+    // }
+
+    useEffect(() => {
+        const fetchItems = async () => {
+            try {
+                const res = await axios.get(
+                    'http://localhost:3000/api/v1/products'
+                );
+                console.log(res.data);
+
+                // const itemData = res.data.map((responseData: Product) => {
+                //     return responseData
+                // })
+                setItems(res.data);
+            } catch (error) {
+                console.log(error);
+            }
+        }
+
+        fetchItems();
+    }, [])
+
     const [paginationPage, setPaginationPage] = useState(1);
-    // const posts = usePage().props.posts;
-    const maxCount = products.length;
+
+    const maxCount = items.length;
     const pageSize = 9;
     const maxPagination = Math.ceil(maxCount / pageSize); //ページネーション最大ページ数
 
     const startRange = (paginationPage - 1) * pageSize;
     const endRange = startRange + pageSize;
-    const visibleItems = products.slice(startRange, endRange); //1ページ内に表示するアイテムを算出
+    const visibleItems = items.slice(startRange, endRange); //1ページ内に表示するアイテムを算出
 
     return (
-        <Box>
+        <MainLayout>
             <Center>
                 <VStack>
                     <HStack w="85%">
@@ -52,13 +82,14 @@ const Index = ({ products }: ProductProps) => {
                                     >
                                         <Card.Body gap="2">
                                             <Box mx="-6" mt="-6">
-                                                {/* {post.images.length > 0 ? (
+                                                {product.image.length > 0 ? (
                                                     <Image
                                                         w="full"
                                                         h="200px"
                                                         objectFit="cover"
-                                                        src={`/storage/${post.images[0].url}`}
-                                                        alt={post.name}
+                                                        // src={`/storage/${product.image[0].url}`}
+                                                        src={`/storage/${product.image}`}
+                                                        alt={product.name}
                                                     />
                                                 ) : (
                                                     <Image
@@ -66,7 +97,7 @@ const Index = ({ products }: ProductProps) => {
                                                         h="200px"
                                                         src="../nothing_image.png"
                                                     />
-                                                )} */}
+                                                )}
                                             </Box>
 
                                             {/* <Stack mt="6" spacing="3"> */}
@@ -144,7 +175,7 @@ const Index = ({ products }: ProductProps) => {
                     </Card.Root>
                 </VStack>
             </Center>
-        </Box>
+        </MainLayout>
     );
 };
 

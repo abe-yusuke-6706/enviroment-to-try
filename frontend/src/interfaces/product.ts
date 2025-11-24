@@ -4,10 +4,7 @@ export interface Product {
     name: string,
     price: number,
     stock: number,
+    image: string | BigInteger,
     description: string,
     user_id: number
-}
-
-export interface ProductProps {
-    products: Product[],
 }
