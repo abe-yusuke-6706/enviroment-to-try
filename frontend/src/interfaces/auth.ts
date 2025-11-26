@@ -12,7 +12,6 @@ export interface SignUpParams {
 
 // ログイン
 export interface SignInParams {
-    email: string,
-    password: string,
-    remember: boolean
+  email: string
+  password: string
 }

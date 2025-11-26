@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
     Box,
     Image,
@@ -8,46 +8,65 @@ import {
     Center,
     Flex,
     Card,
-    CardBody,
     Heading,
     Input,
-    FormControl,
-    FormLabel,
+    // FormControl,
+    // FormLabel,
 } from "@chakra-ui/react";
-import { useForm } from "@inertiajs/react";
 import MainLayout from "../../Layouts/MainLayout";
-import { StarIcon } from "@chakra-ui/icons";
-import { MdFavorite, MdFavoriteBorder } from "react-icons/md";
+// import { StarIcon } from "@chakra-ui/icons";
+// import { MdFavorite, MdFavoriteBorder } from "react-icons/md";
+// src/@types/swiper-css.d.ts
+declare module "*.css";
 import { Swiper, SwiperSlide } from "swiper/react";
-import "swiper/css";
+import axios from "axios";
+import type { Product } from "@/interfaces/product";
+import { useParams } from "react-router-dom";
 
-const Show = ({ post, comments, isLiked, likes, images }) => {
-    const arrayComments = comments.slice();
-    console.log(images);
-    const {
-        data,
-        setData,
-        delete: destroy,
-        post: submit,
-    } = useForm({
-        comment: "",
-        post_id: post.id,
-    });
+// const Show = ({ post, comments, isLiked, likes, images }) => {
+const Show = () => {
+    // const arrayComments = comments.slice();
 
-    const BASE_URL = "http://localhost/";
+    // const {
+    //     data,
+    //     setData,
+    //     delete: destroy,
+    //     post: submit,
+    // } = useForm({
+    //     comment: "",
+    //     post_id: post.id,
+    // });
 
-    console.log(images);
+    const [product, setProduct] = useState<Product>();
 
-    const onSubmit = (e) => {
-        e.preventDefault();
-        submit(route("comment.store", post.id), data);
-    };
+    // useEffect(() => {
+    const fetchItems = async () => {
+        const params = useParams();
+        console.log(params);
+
+        try {
+            const res = await axios.get(
+                `http://localhost:3000/api/v1/products/${params.id}`
+            );
+            console.log(res.data);
+
+            // const itemData = res.data.map((responseData: Product) => {
+            //     return responseData
+            // })
+            setProduct(res.data);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    fetchItems();
+    // }, [])
 
     return (
         <Box>
             <Center>
-                <Card overflow="hidden" w="65%" mt={10} mb={10}>
-                    <CardBody>
+                <Card.Root overflow="hidden" w="65%" mt={10} mb={10}>
+                    <Card.Body>
                         {/* スライド画像 */}
                         <Swiper
                             spaceBetween={50}
@@ -55,24 +74,17 @@ const Show = ({ post, comments, isLiked, likes, images }) => {
                             onSlideChange={() => console.log("slide change")}
                             onSwiper={(swiper) => console.log(swiper)}
                         >
-                            {!images.length == 0 ? (
-                                images.map((image) => (
-                                    <SwiperSlide key={image.id}>
-                                        <Image
-                                            w="full"
-                                            h="600px"
-                                            objectFit="cover"
-                                            src={`/storage/${image.url}`}
-                                        />
-                                    </SwiperSlide>
-                                ))
-                            ) : (
-                                <Image
-                                    p={5}
-                                    src="../nothing_image.png"
-                                    alt="Green double couch with wooden legs"
-                                />
-                            )}
+                            {image.map((image) => (
+                                <SwiperSlide key={image.id}>
+                                    <Image
+                                        w="full"
+                                        h="600px"
+                                        objectFit="cover"
+                                        src={`/storage/${image.url}`}
+                                    />
+                                </SwiperSlide>
+                            ))
+                            }
                         </Swiper>
 
                         {/* タイトル＆説明 */}
@@ -180,20 +192,20 @@ const Show = ({ post, comments, isLiked, likes, images }) => {
 
                                 {/* コメント一覧 */}
                                 {arrayComments.map((comment) => (
-                                    <Card
+                                    <Card.Root
                                         key={comment.id}
                                         variant="elevated"
                                         my={3}
                                     >
-                                        <CardBody>
+                                        <Card.Body>
                                             <Text>{comment.comment}</Text>
-                                        </CardBody>
-                                    </Card>
+                                        </Card.Body>
+                                    </Card.Root>
                                 ))}
                             </Box>
                         </Stack>
-                    </CardBody>
-                </Card>
+                    </Card.Body>
+                </Card.Root>
             </Center>
         </Box>
     );

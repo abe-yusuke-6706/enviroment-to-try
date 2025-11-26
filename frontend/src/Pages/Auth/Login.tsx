@@ -15,6 +15,9 @@ import type { SignInParams } from "@/interfaces/auth";
 import { Button } from "@chakra-ui/react";
 import { signIn } from "@/lib/api/auth";
 import { useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
+import { useContext } from "react";
+import { AuthContext } from "@/App";
 
 export default function Login({ status }: { status?: string }) {
     // const { data, setData, post, processing, errors, reset } = useForm({
@@ -22,6 +25,7 @@ export default function Login({ status }: { status?: string }) {
     //     password: "",
     //     remember: false,
     // });
+    const { setIsSignedIn, setCurrentUser } = useContext(AuthContext)
 
     const navigate = useNavigate()
 
@@ -36,13 +40,23 @@ export default function Login({ status }: { status?: string }) {
             const formData: SignInParams = {
                 email: email,
                 password: password,
-                remember: remember,
+                // remember: remember,
             }
 
+            console.log("サインイン開始");
             const res = await signIn(formData);
             console.log(res)
+            console.log("サインイン終了");
 
             if (res.status == 200) {
+                Cookies.set("_access_token", res.headers["access-token"])
+                Cookies.set("_client", res.headers["client"])
+                Cookies.set("_uid", res.headers["uid"])
+
+                setIsSignedIn(true)
+                setCurrentUser(res.data.data)
+                console.log("ログイン成功");
+                
                 navigate("/test")
             } else {
                 console.log("ログイン失敗")

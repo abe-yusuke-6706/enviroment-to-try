@@ -8,3 +8,11 @@ export interface Product {
     description: string,
     user_id: number
 }
+
+export interface createProduct {
+    name: string,
+    price: number,
+    stock: number,
+    image: File[] | null,
+    description: string,
+}
