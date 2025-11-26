@@ -38,9 +38,11 @@ import { LuMinus, LuPlus } from "react-icons/lu"
 //     FileUploadDropzone,
 // } from "@saas-ui/file-upload";
 import client from "@/lib/api/client";
+import { useNavigate } from "react-router-dom";
 
 // const Create = ({ googleMapApiKey, mapId }) => {
 const Create = () => {
+    const navigate = useNavigate();
     const [name, setName] = useState<string>("");
     const [images, setImages] = useState<File[] | null>(null);
     const [price, setPrice] = useState<number>(0);
@@ -92,6 +94,7 @@ const Create = () => {
             // const itemData = res.data.map((responseData: Product) => {
             //     return responseData
             // })
+            navigate("/")
         } catch (error) {
             console.log(error);
         }
