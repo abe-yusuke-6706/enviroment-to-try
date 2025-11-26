@@ -1,5 +1,5 @@
 import MainLayout from "@/Layouts/MainLayout";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 // import { StarIcon } from "@chakra-ui/icons";
 import {
     // Box,
@@ -20,14 +20,18 @@ import {
     Stack,
     FileUpload,
     Card,
-    Center
+    Center,
+    HStack,
+    IconButton,
+    NumberInput,
+    useEditable
 } from "@chakra-ui/react";
 import { HiUpload } from "react-icons/hi";
 // import type { createProduct } from "@/interfaces/product";
 // import { useParams } from "react-router-dom";
 import axios from "axios";
 // import { getCurrentUser } from "@/lib/api/auth";
-
+import { LuMinus, LuPlus } from "react-icons/lu"
 // import {
 //     FileUpload,
 //     FileUploadTrigger,
@@ -41,8 +45,13 @@ const Create = () => {
     const [images, setImages] = useState<File[] | null>(null);
     const [price, setPrice] = useState<number>(0);
     const [description, setDescription] = useState<string>("");
+    const [stock, setStock] = useState<number>(0);
     // const [userId, setUserId] = useState<number>(0);
     const formData = new FormData;
+    
+    useEffect(() => {
+        console.log(stock);
+    }, [stock])
 
     const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault()
@@ -64,6 +73,7 @@ const Create = () => {
         formData.append("product[price]", price.toString());
         formData.append("product[stock]", "3");
         formData.append("product[description]", description);
+        formData.append("product[stock]", stock.toString())
         // formData.append("product[user_id]", "1");
 
         if (images) {
@@ -181,6 +191,24 @@ const Create = () => {
                                     </FileUpload.Trigger>
                                     <FileUpload.List showSize clearable />
                                 </FileUpload.Root>
+                            </Field.Root>
+                            <Field.Root>
+                                <Field.Label>在庫数</Field.Label>
+                                <NumberInput.Root defaultValue="3" unstyled spinOnPress={false} onValueChange={(value) => setStock(value.valueAsNumber)}>
+                                    <HStack gap="2">
+                                        <NumberInput.DecrementTrigger asChild>
+                                            <IconButton variant="outline" size="sm">
+                                                <LuMinus />
+                                            </IconButton>
+                                        </NumberInput.DecrementTrigger>
+                                        <NumberInput.ValueText textAlign="center" fontSize="lg" minW="3ch" />
+                                        <NumberInput.IncrementTrigger asChild>
+                                            <IconButton variant="outline" size="sm">
+                                                <LuPlus />
+                                            </IconButton>
+                                        </NumberInput.IncrementTrigger>
+                                    </HStack>
+                                </NumberInput.Root>
                             </Field.Root>
                             <Field.Root>
                                 <Field.Label>料金</Field.Label>
