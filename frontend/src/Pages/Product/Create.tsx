@@ -26,12 +26,14 @@ import { HiUpload } from "react-icons/hi";
 // import type { createProduct } from "@/interfaces/product";
 // import { useParams } from "react-router-dom";
 import axios from "axios";
+// import { getCurrentUser } from "@/lib/api/auth";
 
 // import {
 //     FileUpload,
 //     FileUploadTrigger,
 //     FileUploadDropzone,
 // } from "@saas-ui/file-upload";
+import client from "@/lib/api/client";
 
 // const Create = ({ googleMapApiKey, mapId }) => {
 const Create = () => {
@@ -39,6 +41,7 @@ const Create = () => {
     const [images, setImages] = useState<File[] | null>(null);
     const [price, setPrice] = useState<number>(0);
     const [description, setDescription] = useState<string>("");
+    // const [userId, setUserId] = useState<number>(0);
     const formData = new FormData;
 
     const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -50,12 +53,18 @@ const Create = () => {
         //     stock: 3,
         //     image: images,
         //     description: description,
-        // }
+        // // }
+        // const currentUser = await getCurrentUser()
+        // const userId = currentUser?.data;
+        // console.log(userId);
+        // console.log(userId.data.id);
+        // setUserId(currentUser?.data.id);
 
         formData.append("product[name]", name);
         formData.append("product[price]", price.toString());
         formData.append("product[stock]", "3");
         formData.append("product[description]", description);
+        // formData.append("product[user_id]", "1");
 
         if (images) {
             images.forEach(image => formData.append("product[images][]", image))
@@ -64,15 +73,10 @@ const Create = () => {
         console.log(formData);
 
         try {
-            const isUserLogin = await axios.get(
-                `http://localhost:3000/api/v1/auth/sessions`
-            );
+            const isUserLogin = await client.get("auth/sessions");
             console.log(isUserLogin);
-            
-            const res = await axios.post(
-                `http://localhost:3000/api/v1/products`,
-                formData
-            );
+
+            const res = await client.post("/products", formData);
             console.log(res);
 
             // const itemData = res.data.map((responseData: Product) => {

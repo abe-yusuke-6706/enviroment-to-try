@@ -35,8 +35,7 @@ const App = () => {
       if (res?.data.isLogin === true) {
         setIsSignedIn(true)
         setCurrentUser(res?.data.data)
-
-        console.log(currentUser);
+        
         console.log("current user activate")
         console.log(res?.data.data)
       } else {
