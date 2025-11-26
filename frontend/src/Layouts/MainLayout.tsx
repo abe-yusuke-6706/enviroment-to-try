@@ -1,5 +1,6 @@
 // import React, { FC } from "react";
 import type { FC, ReactNode } from "react";
+import { useContext } from "react";
 import {
     Box,
     Image,
@@ -15,10 +16,15 @@ import {
     // MenuButton,
     Menu,
     Portal,
-    Link,
+    Link as ChakraLink,
+    Button,
     // Button,
 } from "@chakra-ui/react";
 // import { usePage, Link } from "@inertiajs/react";
+import { AuthContext } from "@/App";
+import Cookies from "js-cookie";
+import { useNavigate } from "react-router-dom"
+import { signOut } from "@/lib/api/auth";
 
 interface MainLayoutProps {
     children: ReactNode;
@@ -26,7 +32,74 @@ interface MainLayoutProps {
 
 const MainLayout: FC<MainLayoutProps> = ({ children }) => {
     // const { auth } = usePage().props;
+    const { loading, isSignedIn, setIsSignedIn } = useContext(AuthContext);
+    const navigate = useNavigate()
 
+    const handleSignOut = async (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault();
+
+        try {
+            const res = await signOut()
+
+            if (res.data.success === true) {
+                // サインアウト時には各Cookieを削除
+                Cookies.remove("_access_token")
+                Cookies.remove("_client")
+                Cookies.remove("_uid")
+
+                setIsSignedIn(false)
+                navigate("/signin")
+
+                console.log("Succeeded in sign out")
+            } else {
+                console.log("Failed in sign out")
+            }
+        } catch (err) {
+            console.log(err)
+        }
+    }
+
+    const AuthButtons = () => {
+        // 認証完了後はサインアウト用のボタンを表示
+        // 未認証時は認証用のボタンを表示
+        if (!loading) {
+            if (isSignedIn) {
+                return (
+                    <>
+                        <Menu.Item value="新規投稿">
+                            新規投稿
+                        </Menu.Item>
+                        <Menu.Item value="ログアウト">
+                            <Button
+                                as="button"
+                                // href=""
+                                // method="post"
+                                onClick={handleSignOut}
+                            >ログアウト
+                            </Button>
+                        </Menu.Item>
+                    </>
+                )
+            } else {
+                return (
+                    <>
+                        <Menu.Item value="ユーザー登録" asChild>
+                            <a href="/register" target="_blank" rel="noreferrer">
+                                ユーザー登録
+                            </a>
+                        </Menu.Item>
+                        <Menu.Item value="ログイン" asChild>
+                            <a href="/login" target="_blank" rel="noreferrer">
+                                ログイン
+                            </a>
+                        </Menu.Item>
+                    </>
+                )
+            }
+        } else {
+            return <></>
+        }
+    }
     return (
         <div>
             {/* ヘッダー */}
@@ -39,14 +112,14 @@ const MainLayout: FC<MainLayoutProps> = ({ children }) => {
                 <Flex h="100%">
                     <Spacer />
                     <Center h="100%">
-                        <Link href="">
+                        <ChakraLink href="">
                             <Image
                                 height="100px"
                                 objectFit="contain"
                                 src="../header_logo.png"
                                 alt="logo"
                             />
-                        </Link>
+                        </ChakraLink>
                     </Center>
                     <Spacer />
                     <Menu.Root>
@@ -66,20 +139,7 @@ const MainLayout: FC<MainLayoutProps> = ({ children }) => {
                         <Portal>
                             <Menu.Positioner>
                                 <Menu.Content maxH="200px" minW="10rem">
-                                    {/* {menuItems.map((item) => (
-                                        <Menu.Item key={item.value} value={item.value}>
-                                            {item.label}
-                                        </Menu.Item>
-                                    ))} */}
-                                    <Menu.Item value="テスト">
-                                        ラベル1
-                                    </Menu.Item>
-                                    <Menu.Item value="テスト">
-                                        ラベル2
-                                    </Menu.Item>
-                                    <Menu.Item value="テスト">
-                                        ラベル3
-                                    </Menu.Item>
+                                    <AuthButtons></AuthButtons>
                                 </Menu.Content>
                             </Menu.Positioner>
                         </Portal>
@@ -131,10 +191,11 @@ const MainLayout: FC<MainLayoutProps> = ({ children }) => {
 
             {/* メイン */}
             <Box
-                minH="100vh"
-                // bgImage={`url(../background_image.jpg)`}
+                minH="calc(100vh - 200px)" // ヘッダー100 + フッター100 を除いた高さ
+                display="flex"
+                alignItems="center"
+                justifyContent="center"
                 bgSize="cover"
-                // bgPosition="center"
                 bgRepeat="no-repeat"
             >
                 <Box w="90%" m="auto" py={10}>
