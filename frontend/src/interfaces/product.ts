@@ -1,12 +1,17 @@
-// ポスト一覧
+export interface ProductImage {
+    id: number;
+    filename: string;
+    url: string;
+}
+
 export interface Product {
     id: number,
     name: string,
     price: number,
-    stock: number,
-    image: string | BigInteger,
+    stock: number | null,
     description: string,
-    user_id: number
+    user_id: number,
+    images: ProductImage[]
 }
 
 export interface createProduct {

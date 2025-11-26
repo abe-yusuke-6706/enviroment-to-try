@@ -41,7 +41,7 @@ const Index = () => {
                 const res = await axios.get(
                     'http://localhost:3000/api/v1/products'
                 );
-                console.log(res.data);
+                console.log("resの返却がsuccess");
 
                 // const itemData = res.data.map((responseData: Product) => {
                 //     return responseData
@@ -82,14 +82,12 @@ const Index = () => {
                                     >
                                         <Card.Body gap="2">
                                             <Box mx="-6" mt="-6">
-                                                {product.image.length > 0 ? (
+                                                {product.images[0] ? (
                                                     <Image
                                                         w="full"
                                                         h="200px"
                                                         objectFit="cover"
-                                                        // src={`/storage/${product.image[0].url}`}
-                                                        src={`/storage/${product.image}`}
-                                                        alt={product.name}
+                                                        src={product.images[0].url}
                                                     />
                                                 ) : (
                                                     <Image
@@ -114,7 +112,7 @@ const Index = () => {
                                                     letterSpacing="tight"
                                                     mt="2"
                                                 >
-                                                    {product.stock}
+                                                    {product.stock}個
                                                 </Text>
                                                 <Text
                                                     textStyle="2xl"

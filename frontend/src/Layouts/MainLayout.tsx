@@ -48,7 +48,7 @@ const MainLayout: FC<MainLayoutProps> = ({ children }) => {
                 Cookies.remove("_uid")
 
                 setIsSignedIn(false)
-                navigate("/signin")
+                navigate("/login")
 
                 console.log("Succeeded in sign out")
             } else {
@@ -67,7 +67,9 @@ const MainLayout: FC<MainLayoutProps> = ({ children }) => {
                 return (
                     <>
                         <Menu.Item value="新規投稿">
-                            新規投稿
+                            <a href="/create" rel="noreferrer">
+                                新規投稿
+                            </a>
                         </Menu.Item>
                         <Menu.Item value="ログアウト">
                             <Button
