@@ -12,6 +12,11 @@ import {
     HStack,
     IconButton,
     NumberInput,
+    Image,
+    Flex,
+    Text,
+    Box,
+    Spacer,
 } from "@chakra-ui/react";
 import { HiUpload } from "react-icons/hi";
 import { LuMinus, LuPlus } from "react-icons/lu"
@@ -20,6 +25,7 @@ import axios from "axios";
 import type { Product } from "@/interfaces/product";
 import { useParams } from "react-router-dom";
 import type { ProductImage } from "@/interfaces/product";
+import { TiDelete } from "react-icons/ti";
 
 const Edit = () => {
     const navigate = useNavigate();
@@ -165,6 +171,52 @@ const Edit = () => {
                                             <HiUpload /> ファイルアップロード
                                         </Button>
                                     </FileUpload.Trigger>
+                                    <Stack gap="5" mt="4" w="full">
+                                        {images && images.map((img) => (
+                                            <HStack
+                                                key={img.id}
+                                                p="2"
+                                                borderRadius="md"
+                                                gap="4"
+                                                css={{ outline: "1px solid #dcdadaff",}}
+                                            >
+                                                <Box
+                                                    w="10%"
+                                                    h="12"
+                                                    overflow="hidden"
+                                                    borderRadius="sm"
+                                                >
+                                                    <Image
+                                                        src={img.url}
+                                                        objectFit="cover"
+                                                        w="full"
+                                                        h="full"
+                                                        alt={img.filename}
+                                                    />
+                                                </Box>
+                                                <Box w="60%">
+                                                    <Text flex="1" fontSize="sm"
+                                                        css={{
+                                                            whiteSpace: "nowrap",
+                                                            overflow: "hidden",
+                                                            textOverflow: "ellipsis",
+                                                        }}
+                                                    >
+                                                        {img.filename}
+                                                    </Text>
+                                                </Box>
+                                                <Spacer />
+                                                <IconButton
+                                                    variant="ghost"
+                                                    aria-label="Delete image"
+                                                    onClick={() => {
+                                                        setImages(prevImage => prevImage ? prevImage.filter(prev => prev.id !== img.id) : null);
+                                                    }}
+                                                ><TiDelete size="2xl" />
+                                                </IconButton>
+                                            </HStack>
+                                        ))}
+                                    </Stack>
                                     <FileUpload.List showSize clearable />
                                 </FileUpload.Root>
                             </Field.Root>
