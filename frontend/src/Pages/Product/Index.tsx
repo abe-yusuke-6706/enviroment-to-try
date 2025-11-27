@@ -144,7 +144,7 @@ const Index = () => {
                                         </Card.Body>
                                         <Card.Footer gap="2">
                                             <Link
-                                                to="/login"
+                                                to={`/show/${product.id}`}
                                             // width="full"
                                             >
                                                 <Button

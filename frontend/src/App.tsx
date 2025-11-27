@@ -11,6 +11,8 @@ import Create from "./Pages/Product/Create";
 import { getCurrentUser } from "./lib/api/auth";
 import type { User } from "./interfaces";
 import { Navigate } from "react-router-dom";
+import Show from "./Pages/Product/Show";
+import Confirm from "./Pages/Product/Confirm";
 
 export const AuthContext = createContext({} as {
   loading: boolean
@@ -82,12 +84,22 @@ const App = () => {
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/test" element={<Test />} />
+        <Route path="/show/:id" element={<Show />}></Route>
         
         <Route
           path="/create"
           element={
             <Private>
               <Create />
+            </Private>
+          }
+        />
+
+        <Route
+          path="/confirm"
+          element={
+            <Private>
+              <Confirm />
             </Private>
           }
         />

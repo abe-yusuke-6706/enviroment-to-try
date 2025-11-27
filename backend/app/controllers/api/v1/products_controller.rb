@@ -24,9 +24,23 @@ class Api::V1::ProductsController < ApplicationController
     end
 
     def show
-        @product = Product.find(params[:id])
+        product = Product.find(params[:id])
 
-        render json: @product
+        render json: {
+          id: product.id,
+          name: product.name,
+          price: product.price,
+          description: product.description,
+          stock: product.stock,
+          user_id: product.user_id,
+          images: product.images.map { |img|
+            {
+              id: img.id,
+              filename: img.filename.to_s,
+              url: url_for(img)
+            }
+          }
+        }
     end
 
   def create
@@ -34,12 +48,6 @@ class Api::V1::ProductsController < ApplicationController
     
     begin
       @product.save!
-
-      if product_params[:images].present?
-        product_params[:images].each do |image|
-          @product.images.attach(image)
-        end
-      end
 
       render json: @product, status: :created
     rescue => e

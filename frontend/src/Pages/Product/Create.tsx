@@ -1,22 +1,10 @@
 import MainLayout from "@/Layouts/MainLayout";
 import { useEffect, useState } from "react";
-// import { StarIcon } from "@chakra-ui/icons";
 import {
-    // Box,
     Input,
-    // Flex,
     Button,
-    // FormControl,
-    // FormLabel,
-    // VStack,
     Textarea,
-    // Text,
-    // HStack,
-    // FileUpload,
     Field,
-    // Fieldset,
-    // For,
-    // NativeSelect,
     Stack,
     FileUpload,
     Card,
@@ -24,23 +12,11 @@ import {
     HStack,
     IconButton,
     NumberInput,
-    useEditable
 } from "@chakra-ui/react";
 import { HiUpload } from "react-icons/hi";
-// import type { createProduct } from "@/interfaces/product";
-// import { useParams } from "react-router-dom";
-import axios from "axios";
-// import { getCurrentUser } from "@/lib/api/auth";
 import { LuMinus, LuPlus } from "react-icons/lu"
-// import {
-//     FileUpload,
-//     FileUploadTrigger,
-//     FileUploadDropzone,
-// } from "@saas-ui/file-upload";
-import client from "@/lib/api/client";
 import { useNavigate } from "react-router-dom";
 
-// const Create = ({ googleMapApiKey, mapId }) => {
 const Create = () => {
     const navigate = useNavigate();
     const [name, setName] = useState<string>("");
@@ -48,9 +24,7 @@ const Create = () => {
     const [price, setPrice] = useState<number>(0);
     const [description, setDescription] = useState<string>("");
     const [stock, setStock] = useState<number>(0);
-    // const [userId, setUserId] = useState<number>(0);
-    const formData = new FormData;
-    
+
     useEffect(() => {
         console.log(stock);
     }, [stock])
@@ -58,103 +32,39 @@ const Create = () => {
     const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault()
 
-        // const formData: createProduct = {
-        //     name: name,
-        //     price: price,
-        //     stock: 3,
-        //     image: images,
-        //     description: description,
-        // // }
-        // const currentUser = await getCurrentUser()
-        // const userId = currentUser?.data;
-        // console.log(userId);
-        // console.log(userId.data.id);
-        // setUserId(currentUser?.data.id);
+        navigate("/confirm", {
+            state: {
+                name: name,
+                price: price,
+                description: description,
+                images: images,
+                stock: stock,
+            }
+        })
 
-        formData.append("product[name]", name);
-        formData.append("product[price]", price.toString());
-        formData.append("product[stock]", "3");
-        formData.append("product[description]", description);
-        formData.append("product[stock]", stock.toString())
-        // formData.append("product[user_id]", "1");
+        // formData.append("product[name]", name);
+        // formData.append("product[price]", price.toString());
+        // formData.append("product[description]", description);
+        // formData.append("product[stock]", stock.toString());
 
-        if (images) {
-            images.forEach(image => formData.append("product[images][]", image))
-        };
+        // if (images) {
+        //     images.forEach(image => formData.append("product[images][]", image))
+        // };
 
-        console.log(formData);
-
-        try {
-            const isUserLogin = await client.get("auth/sessions");
-            console.log(isUserLogin);
-
-            const res = await client.post("/products", formData);
-            console.log(res);
-
-            // const itemData = res.data.map((responseData: Product) => {
-            //     return responseData
-            // })
-            navigate("/")
-        } catch (error) {
-            console.log(error);
-        }
+        // console.log(formData);
 
         // try {
-        //     const res = await signUp(formData)
-        //     console.log(res)
+        //     const isUserLogin = await client.get("auth/sessions");
+        //     console.log(isUserLogin);
 
-        //     if (res.status === 200) {
+        //     const res = await client.post("/products", formData);
+        //     console.log(res);
 
-        //         Cookies.set("_access_token", res.headers["access-token"])
-        //         Cookies.set("_client", res.headers["client"])
-        //         Cookies.set("_uid", res.headers["uid"])
-
-        //         console.log("ユーザー登録完了")
-        //     } else {
-        //         console.log("ユーザー登録失敗")
-        //     }
-        // } catch (err) {
-        //     console.log(err)
+        //     navigate("/")
+        // } catch (error) {
+        //     console.log(error);
         // }
-
     }
-
-    // const [address, setAddress] = useState(null);
-    // const geocodingLib = useMapsLibrary("geocoding");
-    // const { form_input } = usePage().props;
-
-    // const [mapCenter, setMapCenter] = useState({
-    //     lat: Number(form_input?.latitude ?? 35.6813),
-    //     lng: Number(form_input?.longitude ?? 139.767066),
-    // });
-
-    // const { data, setData, post } = useForm({
-    //     title: form_input?.title ?? "",
-    //     description: form_input?.description ?? "",
-    //     rating: form_input?.rating ?? 0,
-    //     latitude: form_input?.latitude ?? 0,
-    //     longitude: form_input?.longitude ?? 0,
-    //     restaurant_name: form_input?.restaurant_name ?? "",
-    //     address: form_input?.address ?? "",
-    //     images: [],
-    // });
-
-    // const onSubmit = (e) => {
-    //     e.preventDefault();
-    //     console.log(data);
-    //     post(
-    //         route("post.store"),
-    //         {
-    //             ...data,
-    //             _method: "put",
-    //         },
-    //         {
-    //             forceFormData: true,
-    //         }
-    //     );
-    // };
-
-    // console.log(data);
 
     return (
         <MainLayout>
