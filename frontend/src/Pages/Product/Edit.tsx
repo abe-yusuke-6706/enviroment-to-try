@@ -17,6 +17,9 @@ import {
     Text,
     Box,
     Spacer,
+    CloseButton,
+    Dialog,
+    Portal
 } from "@chakra-ui/react";
 import { HiUpload } from "react-icons/hi";
 import { LuMinus, LuPlus } from "react-icons/lu"
@@ -26,6 +29,7 @@ import type { Product } from "@/interfaces/product";
 import { useParams } from "react-router-dom";
 import type { ProductImage } from "@/interfaces/product";
 import { TiDelete } from "react-icons/ti";
+import client from "@/lib/api/client";
 
 const Edit = () => {
     const navigate = useNavigate();
@@ -35,11 +39,14 @@ const Edit = () => {
     const [price, setPrice] = useState<number>(0);
     const [description, setDescription] = useState<string>("");
     const [stock, setStock] = useState<number>(0);
+    const [deleteIds, setDeleteIds] = useState<number[]>([]);
 
     const params = useParams();
+    const formData = new FormData;
 
-    console.log("これはfiles" + files);
-    console.log("これはimages" + images);
+    useEffect(() => {
+        console.log(deleteIds);
+    },[deleteIds]);
 
     useEffect(() => {
         const fetchItems = async () => {
@@ -56,58 +63,44 @@ const Edit = () => {
                 setStock(res.data.stock);
                 setImages(res.data.images);
 
-                const loadExistingImages = async (images: ProductImage[]) => {
-                    const files: File[] = [];
-
-                    if (images!) {
-                        for (const img of images) {
-                            const res = await fetch(img.url);
-                            const blob = await res.blob();
-                            const file = new File([blob], img.filename, { type: blob.type });
-                            files.push(file);
-                        }
-                    }
-                    setFiles(files);
-                };
-
-                await loadExistingImages(res.data.images);
             } catch (error) {
                 console.log(error);
             }
         }
 
         fetchItems();
-
-
-        //   render json: {
-        //   id: product.id,
-        //   name: product.name,
-        //   price: product.price,
-        //   description: product.description,
-        //   stock: product.stock,
-        //   user_id: product.user_id,
-        //   images: product.images.map { |img|
-        //     {
-        //       id: img.id,
-        //       filename: img.filename.to_s,
-        //       url: url_for(img)
-        //     }
-        //   }
-        // }
     }, [])
 
     const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault()
 
-        navigate("/confirm", {
-            state: {
-                name: name,
-                price: price,
-                description: description,
-                images: images,
-                stock: stock,
-            }
-        })
+        e.preventDefault()
+
+        formData.append("product[name]", name);
+        formData.append("product[price]", price.toString());
+        formData.append("product[description]", description);
+        formData.append("product[stock]", stock.toString())
+        // formData.append("product[imageIds]", deleteIds.toString())
+
+        if (deleteIds) {
+            deleteIds.forEach(id => formData.append("product[image_ids][]", id.toString()))
+        };
+
+        if (files) {
+            files.forEach(file => formData.append("product[images][]", file))
+        };
+
+        console.log(deleteIds);
+        console.log(formData);
+
+        try {
+            const res = await client.put(`products/${params.id}`, formData);
+            console.log(res);
+
+            navigate(`/show/${params.id}`)
+        } catch (error) {
+            console.log(error);
+        }
 
         // formData.append("product[name]", name);
         // formData.append("product[price]", price.toString());
@@ -178,7 +171,7 @@ const Edit = () => {
                                                 p="2"
                                                 borderRadius="md"
                                                 gap="4"
-                                                css={{ outline: "1px solid #dcdadaff",}}
+                                                css={{ outline: "1px solid #dcdadaff", }}
                                             >
                                                 <Box
                                                     w="10%"
@@ -208,11 +201,11 @@ const Edit = () => {
                                                 <Spacer />
                                                 <IconButton
                                                     variant="ghost"
-                                                    aria-label="Delete image"
                                                     onClick={() => {
                                                         setImages(prevImage => prevImage ? prevImage.filter(prev => prev.id !== img.id) : null);
+                                                        setDeleteIds(prev => [...prev, img.id]);
                                                     }}
-                                                ><TiDelete size="2xl" />
+                                                ><TiDelete />
                                                 </IconButton>
                                             </HStack>
                                         ))}
@@ -261,11 +254,37 @@ const Edit = () => {
                     </Card.Body>
                     <Card.Footer justifyContent="flex-end">
                         <Button variant="outline">キャンセル</Button>
-                        <Button
-                            variant="solid"
-                            onClick={handleSubmit}>
-                            送信
-                        </Button>
+                        <Dialog.Root>
+                            <Dialog.Trigger asChild>
+                                <Button variant="solid">
+                                    送信
+                                </Button>
+                            </Dialog.Trigger>
+                            <Portal>
+                                <Dialog.Backdrop />
+                                <Dialog.Positioner>
+                                    <Dialog.Content>
+                                        <Dialog.Header>
+                                            <Dialog.Title>確認</Dialog.Title>
+                                        </Dialog.Header>
+                                        <Dialog.Body>
+                                            <p>
+                                                この内容で商品内容を更新します。
+                                            </p>
+                                        </Dialog.Body>
+                                        <Dialog.Footer>
+                                            <Dialog.ActionTrigger asChild>
+                                                <Button variant="outline">キャンセル</Button>
+                                            </Dialog.ActionTrigger>
+                                            <Button onClick={handleSubmit}>送信</Button>
+                                        </Dialog.Footer>
+                                        <Dialog.CloseTrigger asChild>
+                                            <CloseButton size="sm" />
+                                        </Dialog.CloseTrigger>
+                                    </Dialog.Content>
+                                </Dialog.Positioner>
+                            </Portal>
+                        </Dialog.Root>
                     </Card.Footer>
                 </Card.Root>
             </Center>
