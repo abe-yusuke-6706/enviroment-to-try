@@ -8,10 +8,20 @@ export interface Product {
     id: number,
     name: string,
     price: number,
-    stock: number | null,
+    stock: number,
     description: string,
     user_id: number,
     images: ProductImage[]
+}
+
+export interface LocationProduct {
+    id: number,
+    name: string,
+    price: number,
+    stock: number,
+    description: string,
+    user_id: number,
+    images: File[]
 }
 
 export interface createProduct {

@@ -2,14 +2,14 @@ import { useEffect, useState } from "react";
 import {
     Box,
     Image,
-    Button,
+    // Button,
     Text,
     Stack,
     Center,
-    Flex,
+    // Flex,
     Card,
     Heading,
-    Input,
+    // Input,
     // FormControl,
     // FormLabel,
 } from "@chakra-ui/react";
@@ -17,10 +17,17 @@ import MainLayout from "../../Layouts/MainLayout";
 // import { StarIcon } from "@chakra-ui/icons";
 // import { MdFavorite, MdFavoriteBorder } from "react-icons/md";
 // src/@types/swiper-css.d.ts
-declare module "*.css";
-import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules';
+
+import { Swiper, SwiperSlide } from 'swiper/react';
+
+// Import Swiper styles
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+import 'swiper/css/scrollbar';
 import axios from "axios";
-import type { Product } from "@/interfaces/product";
+import type { Product, ProductImage } from "@/interfaces/product";
 import { useParams } from "react-router-dom";
 
 // const Show = ({ post, comments, isLiked, likes, images }) => {
@@ -36,62 +43,67 @@ const Show = () => {
     //     comment: "",
     //     post_id: post.id,
     // });
+    const params = useParams();
+    console.log(params);
+    const [product, setProduct] = useState<Product | null>(null);
 
-    const [product, setProduct] = useState<Product>();
+    useEffect(() => {
+        const fetchItems = async () => {
 
-    // useEffect(() => {
-    const fetchItems = async () => {
-        const params = useParams();
-        console.log(params);
+            try {
+                const res = await axios.get(
+                    `http://localhost:3000/api/v1/products/${params.id}`
+                );
+                console.log(res.data);
 
-        try {
-            const res = await axios.get(
-                `http://localhost:3000/api/v1/products/${params.id}`
-            );
-            console.log(res.data);
-
-            // const itemData = res.data.map((responseData: Product) => {
-            //     return responseData
-            // })
-            setProduct(res.data);
-        } catch (error) {
-            console.log(error);
+                // const itemData = res.data.map((responseData: Product) => {
+                //     return responseData
+                // })
+                setProduct(res.data);
+            } catch (error) {
+                console.log(error);
+            }
         }
-    }
 
-    fetchItems();
-    // }, [])
+        fetchItems();
+    }, [])
 
     return (
-        <Box>
+        <MainLayout>
             <Center>
                 <Card.Root overflow="hidden" w="65%" mt={10} mb={10}>
                     <Card.Body>
-                        {/* スライド画像 */}
-                        <Swiper
-                            spaceBetween={50}
-                            slidesPerView={1}
-                            onSlideChange={() => console.log("slide change")}
-                            onSwiper={(swiper) => console.log(swiper)}
-                        >
-                            {image.map((image) => (
-                                <SwiperSlide key={image.id}>
-                                    <Image
-                                        w="full"
-                                        h="600px"
-                                        objectFit="cover"
-                                        src={`/storage/${image.url}`}
-                                    />
-                                </SwiperSlide>
-                            ))
-                            }
-                        </Swiper>
+                        <Stack mt="6" pl={5}>
+                            {/* スライド画像 */}
+                            <Box w="100%" maxW="100%">
+                                <Swiper
+                                    style={{ width: "100%" }}
+                                    modules={[Navigation, Pagination, Scrollbar, A11y]}
+                                    spaceBetween={50}
+                                    slidesPerView={1}
+                                >
+                                    {product?.images?.map((image: ProductImage) => (
+                                        <SwiperSlide key={image.id}>
+                                            <Box w="100%">
+                                                <Image
+                                                    w="full"
+                                                    h="400px"
+                                                    bg="black"
+                                                    objectFit="contain"
+                                                    src={image.url}
+                                                />
+                                            </Box>
+                                        </SwiperSlide>
+                                    ))}
+                                </Swiper>
+                            </Box>
 
-                        {/* タイトル＆説明 */}
-                        <Stack mt="6" pl={5} spacing="3">
-                            <Heading size="lg">{post.title}</Heading>
+
+                            {/* タイトル＆説明 */}
+                            {/* <Stack mt="6" pl={5} spacing="3"> */}
+                            <Heading size="lg">{product?.name}</Heading>
                             <Text className="line-clamp-2">
-                                {post.description}
+                                {product?.description}
                             </Text>
                             <Text
                                 textStyle="2xl"
@@ -99,12 +111,12 @@ const Show = () => {
                                 letterSpacing="tight"
                                 mt="2"
                             >
-                                {post.restaurant_name}
+                                {product?.price}
                             </Text>
 
-                            <Flex>
-                                {/* 五段階評価 */}
-                                <div>
+                            {/* <Flex> */}
+                            {/* 五段階評価 */}
+                            {/* <div>
                                     {Array(5)
                                         .fill("")
                                         .map((_, i) => (
@@ -119,10 +131,10 @@ const Show = () => {
                                                 }
                                             />
                                         ))}
-                                </div>
+                                </div> */}
 
-                                {/* いいね機能 */}
-                                {isLiked ? (
+                            {/* いいね機能 */}
+                            {/* {isLiked ? (
                                     <Flex ml={5}>
                                         <MdFavorite
                                             size={30}
@@ -154,10 +166,10 @@ const Show = () => {
                                         <span>{likes}</span>
                                     </Flex>
                                 )}
-                            </Flex>
+                            </Flex> */}
 
                             {/* コメント */}
-                            <Box mb={5} mt={5}>
+                            {/* <Box mb={5} mt={5}>
                                 <form onSubmit={onSubmit}>
                                     <FormControl>
                                         <FormLabel htmlFor="restaurant_name">
@@ -188,10 +200,10 @@ const Show = () => {
                                             </Button>
                                         </Flex>
                                     </FormControl>
-                                </form>
+                                </form> */}
 
-                                {/* コメント一覧 */}
-                                {arrayComments.map((comment) => (
+                            {/* コメント一覧 */}
+                            {/* {arrayComments.map((comment) => (
                                     <Card.Root
                                         key={comment.id}
                                         variant="elevated"
@@ -201,15 +213,15 @@ const Show = () => {
                                             <Text>{comment.comment}</Text>
                                         </Card.Body>
                                     </Card.Root>
-                                ))}
-                            </Box>
+                                ))} */}
+                            {/* </Box> */}
                         </Stack>
                     </Card.Body>
                 </Card.Root>
             </Center>
-        </Box>
+        </MainLayout>
     );
 };
 
-Show.layout = (page) => <MainLayout children={page} />;
+Show.layout = (page: number) => <MainLayout children={page} />;
 export default Show;
