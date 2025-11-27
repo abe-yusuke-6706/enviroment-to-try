@@ -56,11 +56,33 @@ class Api::V1::ProductsController < ApplicationController
     end
   end
 
+  def update
+    product = Product.find(params[:id])
+    product.update(update_product_params.except(:image_ids))
+
+    begin
+      if update_product_params[:image_ids].present?
+        update_product_params[:image_ids].each do |image_id|
+          image = product.images.find(image_id)
+          image.purge
+        end
+      end
+    
+      product.save!
+    rescue => e
+      Rails.logger.error e.full_message
+      render json: { error: e.message }, status: 500
+    end
+  end
 
   private
 
     def product_params
-        params.require(:product).permit(:name, :price, :stock, :description, images: [])
+      params.require(:product).permit(:name, :price, :stock, :description, images: [])
+    end
+
+    def update_product_params
+      params.require(:product).permit(:name, :price, :stock, :description, images: [], image_ids: [] )
     end
 
 end
