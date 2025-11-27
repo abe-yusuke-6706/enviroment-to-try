@@ -12,6 +12,9 @@ import {
     // Input,
     // FormControl,
     // FormLabel,
+    Flex,
+    Link,
+    Spacer,
 } from "@chakra-ui/react";
 import MainLayout from "../../Layouts/MainLayout";
 // import { StarIcon } from "@chakra-ui/icons";
@@ -29,6 +32,7 @@ import 'swiper/css/scrollbar';
 import axios from "axios";
 import type { Product, ProductImage } from "@/interfaces/product";
 import { useParams } from "react-router-dom";
+import { FaPenToSquare } from "react-icons/fa6";
 
 // const Show = ({ post, comments, isLiked, likes, images }) => {
 const Show = () => {
@@ -105,15 +109,20 @@ const Show = () => {
                             <Text className="line-clamp-2">
                                 {product?.description}
                             </Text>
-                            <Text
-                                textStyle="2xl"
-                                fontWeight="medium"
-                                letterSpacing="tight"
-                                mt="2"
-                            >
-                                {product?.price}
-                            </Text>
-
+                            <Flex>
+                                <Text
+                                    textStyle="2xl"
+                                    fontWeight="medium"
+                                    letterSpacing="tight"
+                                    mt="2"
+                                >
+                                    {product?.price}
+                                </Text>
+                                <Spacer />
+                                <Link href={`/edit/${params.id}`}>
+                                    編集<FaPenToSquare />
+                                </Link>
+                            </Flex>
                             {/* <Flex> */}
                             {/* 五段階評価 */}
                             {/* <div>

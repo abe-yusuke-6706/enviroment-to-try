@@ -13,6 +13,7 @@ import type { User } from "./interfaces";
 import { Navigate } from "react-router-dom";
 import Show from "./Pages/Product/Show";
 import Confirm from "./Pages/Product/Confirm";
+import Edit from "./Pages/Product/Edit";
 
 export const AuthContext = createContext({} as {
   loading: boolean
@@ -37,7 +38,7 @@ const App = () => {
       if (res?.data.isLogin === true) {
         setIsSignedIn(true)
         setCurrentUser(res?.data.data)
-        
+
         console.log("current user activate")
         console.log(res?.data.data)
       } else {
@@ -85,7 +86,7 @@ const App = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/test" element={<Test />} />
         <Route path="/show/:id" element={<Show />}></Route>
-        
+
         <Route
           path="/create"
           element={
@@ -94,12 +95,19 @@ const App = () => {
             </Private>
           }
         />
-
         <Route
           path="/confirm"
           element={
             <Private>
               <Confirm />
+            </Private>
+          }
+        />
+        <Route
+          path="/edit/:id"
+          element={
+            <Private>
+              <Edit />
             </Private>
           }
         />
