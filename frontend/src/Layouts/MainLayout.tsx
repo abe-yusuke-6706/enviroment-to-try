@@ -114,7 +114,7 @@ const MainLayout: FC<MainLayoutProps> = ({ children }) => {
                 <Flex h="100%">
                     <Spacer />
                     <Center h="100%">
-                        <ChakraLink href="">
+                        <ChakraLink href="/">
                             <Image
                                 height="100px"
                                 objectFit="contain"

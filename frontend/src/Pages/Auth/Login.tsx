@@ -57,7 +57,7 @@ export default function Login({ status }: { status?: string }) {
                 setCurrentUser(res.data.data)
                 console.log("ログイン成功");
                 
-                navigate("/test")
+                navigate("/")
             } else {
                 console.log("ログイン失敗")
             }

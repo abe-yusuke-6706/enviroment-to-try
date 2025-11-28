@@ -1,4 +1,3 @@
-// import Cookies from "js-cookie";
 import client from "./client";
 import Cookies from "js-cookie";
 
@@ -22,21 +21,11 @@ export const signOut = () => {
 
 // 認証済みユーザー取得
 export const getCurrentUser = () => {
-  console.log("クッキーを持っているか判定");
   if (!Cookies.get("_access_token") || !Cookies.get("_client") || !Cookies.get("_uid")) return
 
-  console.log("エンドポイントにリクエスト送る");
   return client.get("auth/sessions", { headers: {
     "access-token": Cookies.get("_access_token"),
     "client": Cookies.get("_client"),
     "uid": Cookies.get("_uid")
   }})
 }
-
-                // Cookies.set("_access_token", res.headers["access-token"])
-                // Cookies.set("_client", res.headers["client"])
-                // Cookies.set("_uid", res.headers["uid"])
-
-                // api_v1_auth_validate_token_path	
-                // GET	/api/v1/auth/validate_token(.:format)	
-                // devise_token_auth/token_validations#validate_token

@@ -13,8 +13,9 @@ import type { User } from "./interfaces";
 import { Navigate } from "react-router-dom";
 import Show from "./Pages/Product/Show";
 import Confirm from "./Pages/Product/Confirm";
-import Edit from "./Pages/Product/Edit";
-
+import ProductEdit from "./Pages/Product/Edit";
+import Profile from "./Pages/Auth/Profile";
+import ProfileEdit from "./Pages/Auth/Edit";
 export const AuthContext = createContext({} as {
   loading: boolean
   setLoading: React.Dispatch<React.SetStateAction<boolean>>
@@ -107,7 +108,23 @@ const App = () => {
           path="/edit/:id"
           element={
             <Private>
-              <Edit />
+              <ProductEdit />
+            </Private>
+          }
+        />
+        <Route
+          path="/auth/profile"
+          element={
+            <Private>
+              <Profile />
+            </Private>
+          }
+        />
+        <Route
+          path="/auth/profile/edit"
+          element={
+            <Private>
+              <ProfileEdit />
             </Private>
           }
         />
