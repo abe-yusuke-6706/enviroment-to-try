@@ -2,7 +2,7 @@ class Api::V1::ProductsController < ApplicationController
     # before_action :authenticate_user!, except: [:index,:show]
 
     def index
-        @products = Product.all
+        @products = Product.includes(images_attachments: :blob).all
 
         render json: @products.map { |product|
         {

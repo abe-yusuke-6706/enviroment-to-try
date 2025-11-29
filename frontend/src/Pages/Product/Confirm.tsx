@@ -26,10 +26,6 @@ const Confirm = () => {
 
     const formData = new FormData;
 
-    useEffect(() => {
-        console.log(stock);
-    }, [stock])
-
     const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault()
 

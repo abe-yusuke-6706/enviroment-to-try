@@ -17,6 +17,8 @@ import ProductEdit from "./Pages/Product/Edit";
 import Profile from "./Pages/Auth/Profile";
 import ProfileEdit from "./Pages/Auth/Edit";
 import CartIndex from "./Pages/Cart/Index";
+import CartConfirm from "./Pages/Cart/Confirm";
+import OrderIndex from "./Pages/Orders/Index";
 
 export const AuthContext = createContext({} as {
   loading: boolean
@@ -130,11 +132,27 @@ const App = () => {
             </Private>
           }
         />
-                <Route
+        <Route
           path="/cart/index"
           element={
             <Private>
               <CartIndex />
+            </Private>
+          }
+        />
+        <Route
+          path="/cart/confirm"
+          element={
+            <Private>
+              <CartConfirm />
+            </Private>
+          }
+        />
+        <Route
+          path="/orders"
+          element={
+            <Private>
+              <OrderIndex />
             </Private>
           }
         />
