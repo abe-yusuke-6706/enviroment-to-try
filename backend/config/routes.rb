@@ -4,11 +4,13 @@ Rails.application.routes.draw do
       resources :test, only: %i[index]
       
       mount_devise_token_auth_for 'User', at: 'auth', controllers: {
-        registrations: 'api/v1/auth/registrations'
+        registrations: 'api/v1/auth/registrations',
+        token_validations: 'api/v1/auth/token_validations'
       }
 
       namespace :auth do
         resources :sessions, only: %i[index]
+        resource :avatar, only: [:show]
       end
 
       resources :products, only: %i[index show create update destroy]

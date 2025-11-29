@@ -38,7 +38,7 @@ const Show = () => {
                 );
 
                 setProduct(res.data);
-                console.log(product?.images?.length);
+                console.log(res.data);
             } catch (error) {
                 console.log(error);
             }

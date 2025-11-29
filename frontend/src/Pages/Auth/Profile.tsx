@@ -2,35 +2,27 @@ import MainLayout from "@/Layouts/MainLayout";
 import { useState } from "react";
 import { Button, Box, Card, Image, Spacer, Center } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
-import Cookies from "js-cookie";
 import client from "@/lib/api/client";
 import { useEffect } from "react";
 
 export default function Profile() {
     const navigate = useNavigate()
 
+    const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
     const [name, setName] = useState<string>("")
     const [email, setEmail] = useState<string>("")
-    const formData = new FormData;
 
     useEffect(() => {
         const fetchItems = async () => {
 
             try {
-                const res = await client.get("auth/validate_token", {
-                    headers: {
-                        "access-token": Cookies.get("_access_token"),
-                        client: Cookies.get("_client"),
-                        uid: Cookies.get("_uid"),
-                    },
-                });
+                const res = await client.get("auth/validate_token");
+                const resAvatar = await client.get("auth/avatar");
 
-                console.log(res.data.data);
-
-                // setAvatarUrl(res.data.data.image)
-                setName(res.data.data.name);
+                setAvatarUrl(resAvatar.data.avatarUrl);
+                setName(res.data.name);
                 console.log(name);
-                setEmail(res.data.data.email);
+                setEmail(res.data.email);
             } catch (error) {
                 console.log(error);
             }
@@ -57,13 +49,24 @@ export default function Profile() {
             <Center>
                 <Card.Root maxW="sm" w="full">
                     <Center mt={5}>
-                        <Image
-                            src="https://bit.ly/naruto-sage"
-                            boxSize="150px"
-                            borderRadius="full"
-                            fit="cover"
-                            alt="Naruto Uzumaki"
-                        />
+                        {avatarUrl ?
+                            (
+                                <Image
+                                    src={avatarUrl?.toString()}
+                                    boxSize="150px"
+                                    borderRadius="full"
+                                    fit="cover"
+                                    alt="Naruto Uzumaki"
+                                />
+                            ) : (
+                                <Image
+                                    src="../user_icon.png"
+                                    boxSize="150px"
+                                    borderRadius="full"
+                                    fit="cover"
+                                    alt="Naruto Uzumaki"
+                                />
+                            )}
                     </Center>
                     <Card.Body gap="5">
                         <Center>
@@ -94,7 +97,7 @@ export default function Profile() {
 
                     {/* <Center> */}
                     <Card.Footer gap="2">
-                        <Button variant="ghost">
+                        <Button variant="ghost" onClick={() => navigate(-1)}>
                             戻る
                         </Button>
                         <Spacer />
