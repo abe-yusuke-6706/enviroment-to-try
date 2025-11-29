@@ -27,6 +27,7 @@ export default function Profile() {
 
                 console.log(res.data.data);
 
+                // setAvatarUrl(res.data.data.image)
                 setName(res.data.data.name);
                 console.log(name);
                 setEmail(res.data.data.email);
@@ -41,10 +42,14 @@ export default function Profile() {
     const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
 
-        formData.append("product[name]", name);
-        formData.append("product[price]", email);
-
-        navigate("/auth/profile/edit")
+        navigate("/auth/profile/edit",
+            {
+                state: {
+                    name: name,
+                    email: email,
+                }
+            }
+        )
     }
 
     return (
