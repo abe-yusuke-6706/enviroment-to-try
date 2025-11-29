@@ -16,6 +16,8 @@ import Confirm from "./Pages/Product/Confirm";
 import ProductEdit from "./Pages/Product/Edit";
 import Profile from "./Pages/Auth/Profile";
 import ProfileEdit from "./Pages/Auth/Edit";
+import CartIndex from "./Pages/Cart/Index";
+
 export const AuthContext = createContext({} as {
   loading: boolean
   setLoading: React.Dispatch<React.SetStateAction<boolean>>
@@ -125,6 +127,14 @@ const App = () => {
           element={
             <Private>
               <ProfileEdit />
+            </Private>
+          }
+        />
+                <Route
+          path="/cart/index"
+          element={
+            <Private>
+              <CartIndex />
             </Private>
           }
         />

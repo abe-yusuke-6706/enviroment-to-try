@@ -41,29 +41,6 @@ const Create = () => {
                 stock: stock,
             }
         })
-
-        // formData.append("product[name]", name);
-        // formData.append("product[price]", price.toString());
-        // formData.append("product[description]", description);
-        // formData.append("product[stock]", stock.toString());
-
-        // if (images) {
-        //     images.forEach(image => formData.append("product[images][]", image))
-        // };
-
-        // console.log(formData);
-
-        // try {
-        //     const isUserLogin = await client.get("auth/sessions");
-        //     console.log(isUserLogin);
-
-        //     const res = await client.post("/products", formData);
-        //     console.log(res);
-
-        //     navigate("/")
-        // } catch (error) {
-        //     console.log(error);
-        // }
     }
 
     return (

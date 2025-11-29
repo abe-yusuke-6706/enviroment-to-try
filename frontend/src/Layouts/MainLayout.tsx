@@ -18,7 +18,7 @@ import {
     Portal,
     Link as ChakraLink,
     Button,
-    useStatStyles,
+    // useStatStyles,
     // Button,
 } from "@chakra-ui/react";
 // import { usePage, Link } from "@inertiajs/react";
@@ -92,6 +92,11 @@ const MainLayout: FC<MainLayoutProps> = ({ children }) => {
                         <Menu.Item value="新規投稿">
                             <a href="/create" rel="noreferrer">
                                 新規投稿
+                            </a>
+                        </Menu.Item>
+                        <Menu.Item value="カート">
+                            <a href="/cart/index" rel="noreferrer">
+                                カート
                             </a>
                         </Menu.Item>
                         <Menu.Item value="ログアウト">
@@ -180,48 +185,6 @@ const MainLayout: FC<MainLayoutProps> = ({ children }) => {
                             </Menu.Positioner>
                         </Portal>
                     </Menu.Root>
-                    {/*<Menu>
-                        <MenuButton>
-                            <Center h="100%">
-                                <Box variant="outline" h="100%" size="sm">
-                                    <Image
-                                        height="100px"
-                                        objectFit="contain"
-                                        src="../user_icon.png"
-                                        alt="logo"
-                                    />
-                                </Box>
-                            </Center>
-                        </MenuButton>
-                        {auth.user ? (
-                            <MenuList>
-                                <MenuItem as="a" href="">
-                                    新規投稿
-                                </MenuItem>
-                                <MenuItem as="a" href={route">
-                                    プロフィール
-                                </MenuItem>
-                                <MenuItem className="py-[4px] px-[8px] hover:bg-rose-300 text-m">
-                                    <Link
-                                        as="button"
-                                        href=""
-                                        method="post"
-                                    >
-                                        ログアウト
-                                    </Link>
-                                </MenuItem>
-                            </MenuList>
-                        ) : (
-                            <MenuList>
-                                <MenuItem as="a" href="">
-                                    ユーザー登録
-                                </MenuItem>
-                                <MenuItem as="a" href="">
-                                    ログイン
-                                </MenuItem>
-                            </MenuList>
-                        )}
-                    </Menu> */}
                 </Flex>
             </Box>
 
