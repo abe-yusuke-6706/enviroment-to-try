@@ -9,8 +9,13 @@ import {
     Heading,
     Flex,
     Link,
+    IconButton,
+    NumberInput,
+    Button,
     Spacer,
+    HStack,
 } from "@chakra-ui/react";
+import { LuMinus, LuPlus } from "react-icons/lu";
 import MainLayout from "../../Layouts/MainLayout";
 import { Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -22,12 +27,18 @@ import axios from "axios";
 import type { Product, ProductImage } from "@/interfaces/product";
 import { useParams } from "react-router-dom";
 import { FaPenToSquare } from "react-icons/fa6";
+import client from "@/lib/api/client";
+import { useNavigate } from "react-router-dom";
 
 const Show = () => {
 
     const params = useParams();
-    console.log(params);
+    const navigate = useNavigate();
+
     const [product, setProduct] = useState<Product | null>(null);
+    const [createdUserId, setCreatedUserId] = useState<number>(0);
+    const [currentUserId, setCurrentUserId] = useState<number>(0)
+    const [quantity, setQuantity] = useState<number>(0);
 
     useEffect(() => {
         const fetchItems = async () => {
@@ -36,9 +47,12 @@ const Show = () => {
                 const res = await axios.get(
                     `http://localhost:3000/api/v1/products/${params.id}`
                 );
+                const resCurrentUserId = await client.get("auth/validate_token");
 
                 setProduct(res.data);
-                console.log(res.data);
+                setCurrentUserId(resCurrentUserId.data.id);
+                setCreatedUserId(res.data.user_id);
+                console.log(createdUserId, currentUserId);
             } catch (error) {
                 console.log(error);
             }
@@ -46,6 +60,26 @@ const Show = () => {
 
         fetchItems();
     }, [])
+
+    const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault()
+
+        const fetchItems = async () => {
+
+            try {
+                await client.post("cart_items", {
+                    quantity: quantity,
+                    product_id: product?.id
+                });
+
+                navigate("/");
+            } catch (error) {
+                console.log(error);
+            }
+        }
+
+        fetchItems();
+    }
 
     return (
         <MainLayout>
@@ -95,19 +129,43 @@ const Show = () => {
                             <Text className="line-clamp-2">
                                 {product?.description}
                             </Text>
+                            <Text
+                                textStyle="2xl"
+                                fontWeight="medium"
+                                letterSpacing="tight"
+                                mt="2"
+                            >
+                                {product?.price}
+                            </Text>
                             <Flex>
-                                <Text
-                                    textStyle="2xl"
-                                    fontWeight="medium"
-                                    letterSpacing="tight"
-                                    mt="2"
-                                >
-                                    {product?.price}
-                                </Text>
+                                <NumberInput.Root defaultValue="3" unstyled spinOnPress={false} onValueChange={(value) => setQuantity(value.valueAsNumber)}>
+                                    <HStack gap="2">
+                                        <NumberInput.DecrementTrigger asChild>
+                                            <IconButton variant="outline" size="sm">
+                                                <LuMinus />
+                                            </IconButton>
+                                        </NumberInput.DecrementTrigger>
+                                        <NumberInput.ValueText textAlign="center" fontSize="lg" minW="3ch" />
+                                        <NumberInput.IncrementTrigger asChild>
+                                            <IconButton variant="outline" size="sm">
+                                                <LuPlus />
+                                            </IconButton>
+                                        </NumberInput.IncrementTrigger>
+                                    </HStack>
+                                </NumberInput.Root>
                                 <Spacer />
-                                <Link href={`/edit/${params.id}`}>
-                                    編集<FaPenToSquare />
-                                </Link>
+                                {currentUserId === createdUserId ? (
+                                    <Link href={`/edit/${params.id}`}>
+                                        編集<FaPenToSquare />
+                                    </Link>
+                                ) : (
+                                    <Button
+                                        variant="solid"
+                                        onClick={handleSubmit}
+                                    >
+                                        カートに入れる
+                                    </Button>
+                                )}
                             </Flex>
                         </Stack>
                     </Card.Body>
