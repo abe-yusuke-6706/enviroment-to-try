@@ -100,7 +100,7 @@ const MainLayout: FC<MainLayoutProps> = ({ children }) => {
                             </a>
                         </Menu.Item>
                         <Menu.Item value="購入済み">
-                            <a href="/orders" rel="noreferrer">
+                            <a href="/order/index" rel="noreferrer">
                                 購入済み
                             </a>
                         </Menu.Item>

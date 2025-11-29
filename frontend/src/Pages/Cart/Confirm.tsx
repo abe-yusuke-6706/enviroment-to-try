@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react";
 import {
     Box,
     Image,
@@ -14,10 +13,7 @@ import {
     VStack,
 } from "@chakra-ui/react";
 import MainLayout from "@/Layouts/MainLayout";
-// import Pagination from "@mui/material/Pagination";
 import { Link } from "react-router-dom";
-// import axios from "axios";
-import type { CartProduct } from "@/interfaces/product";
 import client from "@/lib/api/client";
 import { useNavigate } from "react-router-dom";
 import type { LocationCartProduct } from "@/interfaces/product";
