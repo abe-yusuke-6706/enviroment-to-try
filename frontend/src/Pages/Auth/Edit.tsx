@@ -1,13 +1,11 @@
 import MainLayout from "@/Layouts/MainLayout";
 import { useState } from "react";
-import { Button, FileUpload, Card, Image, Spacer, Center, Field, Input, Stack } from "@chakra-ui/react";
+import { Button, FileUpload, Card, Dialog, CloseButton, Portal, Center, Field, Input, Stack } from "@chakra-ui/react";
 import { useNavigate, useLocation } from "react-router-dom";
-import Cookies from "js-cookie";
 import client from "@/lib/api/client";
-import { useEffect } from "react";
 import type { LocationAuth } from "@/interfaces/auth";
 import { HiUpload } from "react-icons/hi";
-import axios from "axios";
+
 export default function Profile() {
     const navigate = useNavigate()
 
@@ -29,7 +27,7 @@ export default function Profile() {
             formData.append("name", updateName);
             formData.append("email", updateEmail);
             if (password) formData.append("password", password);
-            if(passwordConfirmation) formData.append("password_confirmation", passwordConfirmation);
+            if (passwordConfirmation) formData.append("password_confirmation", passwordConfirmation);
 
             if (avatar) {
                 formData.append("avatar", avatar[0]);
@@ -41,14 +39,11 @@ export default function Profile() {
                     {
                         headers: {
                             "Accept": "application/json",
-                            "access-token": Cookies.get("_access_token"),
-                            "client": Cookies.get("_client"),
-                            "uid": Cookies.get("_uid"),
                         }
                     }
                 );
 
-                navigate("/");
+                navigate("/auth/profile");
             } catch (error) {
                 console.log(error);
             }
@@ -139,8 +134,36 @@ export default function Profile() {
                         </Stack>
                     </Card.Body>
                     <Card.Footer justifyContent="flex-end">
-                        <Button variant="outline">キャンセル</Button>
-                        <Button variant="solid" onClick={handleSubmit}>送信</Button>
+                        <Button variant="outline" onClick={() => navigate(-1)}>キャンセル</Button>
+                        <Dialog.Root>
+                            <Dialog.Trigger asChild>
+                                <Button variant="solid">送信</Button>
+                            </Dialog.Trigger>
+                            <Portal>
+                                <Dialog.Backdrop />
+                                <Dialog.Positioner>
+                                    <Dialog.Content>
+                                        <Dialog.Header>
+                                            <Dialog.Title>確認</Dialog.Title>
+                                        </Dialog.Header>
+                                        <Dialog.Body>
+                                            <p>
+                                                この内容でプロフィールを更新します。
+                                            </p>
+                                        </Dialog.Body>
+                                        <Dialog.Footer>
+                                            <Dialog.ActionTrigger asChild>
+                                                <Button variant="outline">キャンセル</Button>
+                                            </Dialog.ActionTrigger>
+                                            <Button onClick={handleSubmit}>送信</Button>
+                                        </Dialog.Footer>
+                                        <Dialog.CloseTrigger asChild>
+                                            <CloseButton size="sm" />
+                                        </Dialog.CloseTrigger>
+                                    </Dialog.Content>
+                                </Dialog.Positioner>
+                            </Portal>
+                        </Dialog.Root>
                     </Card.Footer>
                 </Card.Root>
             </Center>

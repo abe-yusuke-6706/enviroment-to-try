@@ -20,6 +20,6 @@ class Api::V1::Auth::RegistrationsController < DeviseTokenAuth::RegistrationsCon
     rescue => e
       Rails.logger.info e.full_message
     end
-    
+
   end
 end

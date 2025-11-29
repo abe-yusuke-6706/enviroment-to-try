@@ -1,6 +1,6 @@
 // import React, { FC } from "react";
 import type { FC, ReactNode } from "react";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import {
     Box,
     Image,
@@ -18,6 +18,7 @@ import {
     Portal,
     Link as ChakraLink,
     Button,
+    useStatStyles,
     // Button,
 } from "@chakra-ui/react";
 // import { usePage, Link } from "@inertiajs/react";
@@ -25,6 +26,8 @@ import { AuthContext } from "@/App";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom"
 import { signOut } from "@/lib/api/auth";
+import { useState } from "react";
+import client from "@/lib/api/client";
 
 interface MainLayoutProps {
     children: ReactNode;
@@ -33,7 +36,22 @@ interface MainLayoutProps {
 const MainLayout: FC<MainLayoutProps> = ({ children }) => {
     // const { auth } = usePage().props;
     const { loading, isSignedIn, setIsSignedIn } = useContext(AuthContext);
+    const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
     const navigate = useNavigate()
+
+    const fetchAvatar = async () => {
+        try {
+            const res = await client.get("auth/avatar");
+
+            setAvatarUrl(res.data.avatarUrl);
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
+    useEffect(() => {
+        fetchAvatar();
+    }, [avatarUrl])
 
     const handleSignOut = async (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
@@ -66,6 +84,11 @@ const MainLayout: FC<MainLayoutProps> = ({ children }) => {
             if (isSignedIn) {
                 return (
                     <>
+                        <Menu.Item value="プロフィール">
+                            <a href="/auth/profile" rel="noreferrer">
+                                プロフィール
+                            </a>
+                        </Menu.Item>
                         <Menu.Item value="新規投稿">
                             <a href="/create" rel="noreferrer">
                                 新規投稿
@@ -127,15 +150,26 @@ const MainLayout: FC<MainLayoutProps> = ({ children }) => {
                     <Menu.Root>
                         <Menu.Trigger asChild>
                             <Center h="100%">
-                                {/* <Box variant="outline" h="100%" size="sm"> */}
-                                <Image
-                                    height="100px"
-                                    objectFit="contain"
-                                    src="../user_icon.png"
-                                    alt="logo"
-                                    _hover={{ cursor: "pointer" }}
-                                />
-                                {/* </Box> */}
+                                {avatarUrl ?
+                                    (
+                                        <Image
+                                            src={avatarUrl}
+                                            height="100px"
+                                            alt="logo"
+                                            _hover={{ cursor: "pointer" }}
+                                            boxSize="70px"
+                                            borderRadius="full"
+                                            fit="cover"
+                                        />
+                                    ) : (
+                                        <Image
+                                            src="../user_icon.png"
+                                            height="100px"
+                                            objectFit="contain"
+                                            alt="logo"
+                                            _hover={{ cursor: "pointer" }}
+                                        />
+                                    )}
                             </Center>
                         </Menu.Trigger>
                         <Portal>
