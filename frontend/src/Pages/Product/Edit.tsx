@@ -13,7 +13,7 @@ import {
     IconButton,
     NumberInput,
     Image,
-    Flex,
+    // Flex,
     Text,
     Box,
     Spacer,
@@ -25,7 +25,7 @@ import { HiUpload } from "react-icons/hi";
 import { LuMinus, LuPlus } from "react-icons/lu"
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import type { Product } from "@/interfaces/product";
+// import type { Product } from "@/interfaces/product";
 import { useParams } from "react-router-dom";
 import type { ProductImage } from "@/interfaces/product";
 import { TiDelete } from "react-icons/ti";
@@ -80,7 +80,6 @@ const Edit = () => {
         formData.append("product[price]", price.toString());
         formData.append("product[description]", description);
         formData.append("product[stock]", stock.toString())
-        // formData.append("product[imageIds]", deleteIds.toString())
 
         if (deleteIds) {
             deleteIds.forEach(id => formData.append("product[image_ids][]", id.toString()))
@@ -101,29 +100,6 @@ const Edit = () => {
         } catch (error) {
             console.log(error);
         }
-
-        // formData.append("product[name]", name);
-        // formData.append("product[price]", price.toString());
-        // formData.append("product[description]", description);
-        // formData.append("product[stock]", stock.toString());
-
-        // if (images) {
-        //     images.forEach(image => formData.append("product[images][]", image))
-        // };
-
-        // console.log(formData);
-
-        // try {
-        //     const isUserLogin = await client.get("auth/sessions");
-        //     console.log(isUserLogin);
-
-        //     const res = await client.post("/products", formData);
-        //     console.log(res);
-
-        //     navigate("/")
-        // } catch (error) {
-        //     console.log(error);
-        // }
     }
 
     return (

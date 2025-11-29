@@ -6,12 +6,13 @@ export interface SignUpParams {
     password_confirmation: string
 }
 
-// export interface csrfToken {
-//     csrf_token: string;
-// }
-
 // ログイン
 export interface SignInParams {
   email: string
   password: string
+}
+
+export interface LocationAuth {
+    name: string
+    email: string
 }

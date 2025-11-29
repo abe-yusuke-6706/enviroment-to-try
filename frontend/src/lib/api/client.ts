@@ -1,11 +1,7 @@
 import applyCaseMiddleware from "axios-case-converter"
 import axios from "axios"
 import Cookies from "js-cookie"
-// applyCaseMiddleware:
-// axiosで受け取ったレスポンスの値をスネークケース→キャメルケースに変換
-// または送信するリクエストの値をキャメルケース→スネークケースに変換してくれるライブラリ
 
-// ヘッダーに関してはケバブケースのままで良いので適用を無視するオプションを追加
 const options = {
   ignoreHeaders: true 
 }
@@ -36,10 +32,10 @@ client.interceptors.response.use((response) => {
   const clientId = response.headers["client"];
   const uid = response.headers["uid"];
 
-  if (accessToken && clientId && uid) {
-    Cookies.set("_access_token", accessToken);
-    Cookies.set("_client", clientId);
-    Cookies.set("_uid", uid);
+  if (accessToken ?? clientId ?? uid) {
+    if (accessToken) Cookies.set("_access_token", accessToken);
+    if (clientId) Cookies.set("_client", clientId);
+    if (uid) Cookies.set("_uid", uid);
   }
 
   return response;
