@@ -31,3 +31,8 @@ export interface createProduct {
     image: File[] | null,
     description: string,
 }
+
+export interface CartProduct {
+  quantity: number,
+  product: Product,
+}
