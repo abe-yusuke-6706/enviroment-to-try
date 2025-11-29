@@ -10,4 +10,7 @@ class User < ActiveRecord::Base
   has_one_attached :avatar
   has_many :cart_items, dependent: :destroy
   has_many :products, through: :cart_items
+
+  has_many :order_items, dependent: :destroy
+  has_many :ordering_products, through: :order_items
 end

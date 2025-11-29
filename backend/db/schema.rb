@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_11_29_173006) do
+ActiveRecord::Schema[7.2].define(version: 2025_11_29_213530) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -48,6 +48,17 @@ ActiveRecord::Schema[7.2].define(version: 2025_11_29_173006) do
     t.index ["product_id"], name: "index_cart_items_on_product_id"
     t.index ["user_id", "product_id"], name: "index_cart_items_on_user_id_and_product_id", unique: true
     t.index ["user_id"], name: "index_cart_items_on_user_id"
+  end
+
+  create_table "order_items", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.integer "price", default: 0, null: false
+    t.integer "quantity", default: 0, null: false
+    t.bigint "product_id", null: false
+    t.bigint "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["product_id"], name: "index_order_items_on_product_id"
+    t.index ["user_id"], name: "index_order_items_on_user_id"
   end
 
   create_table "products", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -90,5 +101,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_11_29_173006) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "cart_items", "products"
   add_foreign_key "cart_items", "users"
+  add_foreign_key "order_items", "products"
+  add_foreign_key "order_items", "users"
   add_foreign_key "products", "users"
 end

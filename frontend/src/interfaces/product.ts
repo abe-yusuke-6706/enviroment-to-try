@@ -36,3 +36,7 @@ export interface CartProduct {
   quantity: number,
   product: Product,
 }
+
+export interface LocationCartProduct {
+    cartItems: CartProduct[],
+}

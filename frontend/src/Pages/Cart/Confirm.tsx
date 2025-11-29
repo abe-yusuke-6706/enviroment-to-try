@@ -20,34 +20,34 @@ import { Link } from "react-router-dom";
 import type { CartProduct } from "@/interfaces/product";
 import client from "@/lib/api/client";
 import { useNavigate } from "react-router-dom";
+import type { LocationCartProduct } from "@/interfaces/product";
+import { useLocation } from "react-router-dom";
 
-const Index = () => {
+const Confirm = () => {
     const navigate = useNavigate();
-    const [cartItems, setCartItems] = useState<CartProduct[]>([]);
 
-    useEffect(() => {
-        const fetchItems = async () => {
-            try {
-                const res = await client.get("cart_items");
-
-                console.log(res);
-                setCartItems(res.data);
-            } catch (error) {
-                console.log(error);
-            }
-        }
-
-        fetchItems();
-    }, [])
+    const location = useLocation();
+    const { cartItems } = location.state as LocationCartProduct;
 
     const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
-        e.preventDefault()
+        e.preventDefault();
 
-        navigate("/cart/confirm", {
-            state: {
-                cartItems: cartItems,
-            }
-        })
+        const formData = new FormData();
+
+        cartItems.forEach((cartItem, i) => {
+            formData.append(`order_items[${i}][product_id]`, cartItem.product.id.toString());
+            formData.append(`order_items[${i}][price]`, cartItem.product.price.toString());
+            formData.append(`order_items[${i}][quantity]`, cartItem.quantity.toString());
+        });
+
+        try {
+            const res = await client.post("/order_items", formData);
+
+            console.log(res);
+            navigate("/cart/index")
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     return (
@@ -113,5 +113,5 @@ const Index = () => {
     );
 };
 
-Index.layout = (page: number) => <MainLayout children={page} />;
-export default Index;
+Confirm.layout = (page: number) => <MainLayout children={page} />;
+export default Confirm;
