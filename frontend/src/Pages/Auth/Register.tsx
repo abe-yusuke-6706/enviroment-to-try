@@ -8,7 +8,7 @@ import MainLayout from "@/Layouts/MainLayout";
 import { useState, } from "react";
 // import GuestLayout from "@/Layouts/GuestLayout";
 import type { SignUpParams } from "@/interfaces/auth";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@chakra-ui/react";
 import Cookies from "js-cookie";
 import { signUp } from "@/lib/api/auth";
@@ -19,6 +19,8 @@ export default function Register() {
     const [email, setEmail] = useState<string>("")
     const [password, setPassword] = useState<string>("")
     const [passwordConfirmation, setPasswordConfirmation] = useState<string>("")
+
+    const navigate = useNavigate();
 
     const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault()
@@ -40,9 +42,7 @@ export default function Register() {
                 Cookies.set("_client", res.headers["client"])
                 Cookies.set("_uid", res.headers["uid"])
 
-                console.log("ユーザー登録完了")
-            } else {
-                console.log("ユーザー登録失敗")
+                navigate("/");
             }
         } catch (err) {
             console.log(err)
@@ -50,22 +50,10 @@ export default function Register() {
 
     }
 
-    // const submit = (e: React.FormEvent<HTMLFormElement>) => {
-    //     // e.preventDefault();
-    //     // console.log(csrf_token);
-
-    //     // post(route("register"), {
-    //     //     ...data,
-    //     //     _token: csrf_token,
-    //     //     onFinish: () => reset("password", "password_confirmation"),
-    //     // });
-    // };
-
     return (
         <MainLayout>
             <div className="flex min-h-screen flex-col items-center pt-6 sm:justify-center sm:pt-0">
                 <div className="mt-6 w-full overflow-hidden bg-white px-6 py-4 shadow-md sm:max-w-md sm:rounded-lg">
-                    {/* <Head title="Register" /> */}
 
                     <form>
                         <div>
@@ -83,10 +71,6 @@ export default function Register() {
                                 required
                             />
 
-                            {/* <InputError
-                                message={errors.name}
-                                className="mt-2"
-                            /> */}
                         </div>
 
                         <div className="mt-4">
@@ -107,10 +91,6 @@ export default function Register() {
                                 required
                             />
 
-                            {/* <InputError
-                                message={errors.email}
-                                className="mt-2"
-                            /> */}
                         </div>
 
                         <div className="mt-4">
@@ -128,10 +108,6 @@ export default function Register() {
                                 required
                             />
 
-                            {/* <InputError
-                                message={errors.password}
-                                className="mt-2"
-                            /> */}
                         </div>
 
                         <div className="mt-4">
@@ -152,15 +128,10 @@ export default function Register() {
                                 required
                             />
 
-                            {/* <InputError
-                                message={errors.password_confirmation}
-                                className="mt-2"
-                            /> */}
                         </div>
 
                         <div className="mt-4 flex items-center justify-end">
                             <Link
-                                // href=""
                                 to="/login"
                                 className="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                             >
@@ -170,7 +141,6 @@ export default function Register() {
                             <Button
                                 className="ms-4"
                                 onClick={handleSubmit}
-                            // disabled={processing}
                             >
                                 登録
                             </Button>

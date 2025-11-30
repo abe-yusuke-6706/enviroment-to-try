@@ -1,5 +1,4 @@
 import MainLayout from "@/Layouts/MainLayout";
-import { useEffect } from "react";
 import {
     Button,
     Card,
@@ -15,39 +14,28 @@ import type { LocationProduct } from "@/interfaces/product";
 const Confirm = () => {
 
     const navigate = useNavigate();
-    // const [name, setName] = useState<string>("");
-    // const [images, setImages] = useState<File[] | null>(null);
-    // const [price, setPrice] = useState<number>(0);
-    // const [description, setDescription] = useState<string>("");
-    // const [stock, setStock] = useState<number>(0);
-
     const location = useLocation();
     const { name, price, stock, description, images } = location.state as LocationProduct;
-
-    const formData = new FormData;
 
     const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault()
 
-        formData.append("product[name]", name);
-        formData.append("product[price]", price.toString());
-        formData.append("product[description]", description);
-        formData.append("product[stock]", stock.toString())
-
-        if (images) {
-            images.forEach(image => formData.append("product[images][]", image))
-        };
-
-        console.log(formData);
+        const formData = new FormData;
 
         try {
-            const isUserLogin = await client.get("auth/sessions");
-            console.log(isUserLogin);
+            formData.append("product[name]", name);
+            formData.append("product[price]", price.toString());
+            formData.append("product[description]", description);
+            formData.append("product[stock]", stock.toString())
 
+            if (images) {
+                images.forEach(image => formData.append("product[images][]", image))
+            };
+
+            await client.get("auth/sessions");
             const res = await client.post("/products", formData);
-            console.log(res);
 
-            navigate("/")
+            navigate(`/show/${res.data.id}`);
         } catch (error) {
             console.log(error);
         }
@@ -79,7 +67,7 @@ const Confirm = () => {
                         </Text>
                     </Card.Body>
                     <Card.Footer>
-                        <Button variant="subtle" colorPalette="red" flex="1">
+                        <Button variant="subtle" colorPalette="red" flex="1" onClick={() => navigate(-1)}>
                             <LuX />
                             キャンセル
                         </Button>

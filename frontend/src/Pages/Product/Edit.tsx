@@ -13,7 +13,6 @@ import {
     IconButton,
     NumberInput,
     Image,
-    // Flex,
     Text,
     Box,
     Spacer,
@@ -25,7 +24,6 @@ import { HiUpload } from "react-icons/hi";
 import { LuMinus, LuPlus } from "react-icons/lu"
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-// import type { Product } from "@/interfaces/product";
 import { useParams } from "react-router-dom";
 import type { ProductImage } from "@/interfaces/product";
 import { TiDelete } from "react-icons/ti";
@@ -36,7 +34,7 @@ const Edit = () => {
     const [name, setName] = useState<string>("");
     const [images, setImages] = useState<ProductImage[] | null>(null);
     const [files, setFiles] = useState<File[] | null>(null);
-    const [price, setPrice] = useState<number>(0);
+    const [price, setPrice] = useState<string>("0");
     const [description, setDescription] = useState<string>("");
     const [stock, setStock] = useState<number>(0);
     const [deleteIds, setDeleteIds] = useState<number[]>([]);
@@ -44,9 +42,43 @@ const Edit = () => {
     const params = useParams();
     const formData = new FormData;
 
-    useEffect(() => {
-        console.log(deleteIds);
-    },[deleteIds]);
+    const isDataInvalid = (
+        !name ||
+        !description ||
+        Number(price) === undefined || Number(price) === null || Number(price) <= 0 || isNaN(Number(price)) ||
+        stock  < 0 
+    );
+
+    const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault()
+
+        if (isDataInvalid) {
+            navigate(`/edit/${params.id}`);
+            return null;
+        }
+
+        formData.append("product[name]", name);
+        formData.append("product[price]", (price === "" ? "0" : Number(price).toString()));
+        formData.append("product[description]", description);
+        formData.append("product[stock]", stock.toString())
+
+        if (deleteIds) {
+            deleteIds.forEach(id => formData.append("product[image_ids][]", id.toString()))
+        };
+
+        if (files) {
+            files.forEach(file => formData.append("product[images][]", file))
+        };
+
+        try {
+            const res = await client.put(`products/${params.id}`, formData);
+            console.log(res);
+
+            navigate(`/show/${params.id}`)
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     useEffect(() => {
         const fetchItems = async () => {
@@ -70,37 +102,6 @@ const Edit = () => {
 
         fetchItems();
     }, [])
-
-    const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
-        e.preventDefault()
-
-        e.preventDefault()
-
-        formData.append("product[name]", name);
-        formData.append("product[price]", price.toString());
-        formData.append("product[description]", description);
-        formData.append("product[stock]", stock.toString())
-
-        if (deleteIds) {
-            deleteIds.forEach(id => formData.append("product[image_ids][]", id.toString()))
-        };
-
-        if (files) {
-            files.forEach(file => formData.append("product[images][]", file))
-        };
-
-        console.log(deleteIds);
-        console.log(formData);
-
-        try {
-            const res = await client.put(`products/${params.id}`, formData);
-            console.log(res);
-
-            navigate(`/show/${params.id}`)
-        } catch (error) {
-            console.log(error);
-        }
-    }
 
     return (
         <MainLayout>
@@ -212,8 +213,7 @@ const Edit = () => {
                                 <Input
                                     name="price"
                                     value={price}
-                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                                        setPrice(Number(e.target.value))}
+                                    onChange={(e) => setPrice(e.target.value)}
                                     required
                                 />
                             </Field.Root>

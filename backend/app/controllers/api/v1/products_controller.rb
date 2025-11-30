@@ -58,17 +58,24 @@ class Api::V1::ProductsController < ApplicationController
 
   def update
     product = Product.find(params[:id])
-    product.update(update_product_params.except(:image_ids))
+    
+    scalar_attributes = update_product_attributes
+    
+    image_ids_to_purge = update_product_params[:image_ids]
+    new_images = update_product_params[:images]
 
     begin
-      if update_product_params[:image_ids].present?
-        update_product_params[:image_ids].each do |image_id|
-          image = product.images.find(image_id)
-          image.purge
-        end
+      product.update!(scalar_attributes)
+      
+      if image_ids_to_purge.present?
+        product.images.attachments.where(id: image_ids_to_purge).each(&:purge)
+      end
+
+      if new_images.present?
+        product.images.attach(new_images)
       end
     
-      product.save!
+      render json: product, status: :ok
     rescue => e
       Rails.logger.error e.full_message
       render json: { error: e.message }, status: 500
@@ -82,7 +89,11 @@ class Api::V1::ProductsController < ApplicationController
     end
 
     def update_product_params
-      params.require(:product).permit(:name, :price, :stock, :description, images: [], image_ids: [] )
+      params.require(:product).permit(:name, :price, :stock, :description, images: [], image_ids: [])
+    end
+
+    def update_product_attributes
+      params.require(:product).permit(:name, :price, :stock, :description)
     end
 
 end

@@ -8,7 +8,6 @@ import { HiUpload } from "react-icons/hi";
 
 export default function Profile() {
     const navigate = useNavigate()
-
     const location = useLocation();
     const { name, email } = location.state as LocationAuth;
 
@@ -17,6 +16,7 @@ export default function Profile() {
     const [updateEmail, setUpdateEmail] = useState<string>(email);
     const [password, setPassword] = useState<string>("")
     const [passwordConfirmation, setPasswordConfirmation] = useState<string>("")
+
     const formData = new FormData;
 
     const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -55,7 +55,7 @@ export default function Profile() {
     return (
         <MainLayout>
             <Center>
-                <Card.Root maxW="md">
+                <Card.Root maxW="sm" w="full">
                     <Card.Header>
                         <Card.Title>プロフィール編集画面</Card.Title>
                         <Card.Description>
