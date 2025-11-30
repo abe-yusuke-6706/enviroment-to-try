@@ -11,7 +11,9 @@ import {
     WrapItem,
     Card,
     Heading,
+    Flex,
     VStack,
+    Spacer,
 } from "@chakra-ui/react";
 import MainLayout from "@/Layouts/MainLayout";
 import Pagination from "@mui/material/Pagination";
@@ -53,13 +55,13 @@ const Index = () => {
             <Center>
                 <VStack>
                     <HStack w="85%">
-                        <Wrap mt="10" justify="center">
+                        <Wrap mt="10" gap={8} justify="center">
                             {visibleItems.map((product) => (
                                 <WrapItem key={product.id} w="360px">
                                     <Card.Root
                                         key={product.id}
                                         overflow="hidden"
-                                        height="580px"
+                                        height="500px"
                                         width="400px"
                                     >
                                         <Card.Body gap="2">
@@ -81,31 +83,35 @@ const Index = () => {
                                             </Box>
 
                                             <Stack mt="6" gap="3">
-                                                <Heading size="lg">
+                                                <Heading size="lg" className="line-clamp-2">
                                                     {product.name}
                                                 </Heading>
-                                                <Text className="line-clamp-2">
+                                                <Card.Description className="line-clamp-2">
                                                     {product.description}
-                                                </Text>
-                                                <Text
-                                                    textStyle="2xl"
-                                                    fontWeight="medium"
-                                                    letterSpacing="tight"
-                                                    mt="2"
-                                                >
-                                                    {product.stock}個
-                                                </Text>
-                                                <Text
-                                                    textStyle="2xl"
-                                                    fontWeight="medium"
-                                                    letterSpacing="tight"
-                                                    mt="2"
-                                                >
-                                                    {product.price}
-                                                </Text>
+                                                </Card.Description>
+                                                <Flex>
+                                                    <Text
+                                                        textStyle="2xl"
+                                                        fontWeight="medium"
+                                                        letterSpacing="tight"
+                                                        mt="2"
+                                                    >
+                                                        {product.stock}個
+                                                    </Text>
+                                                    <Spacer />
+                                                    <Text
+                                                        textStyle="2xl"
+                                                        fontWeight="medium"
+                                                        letterSpacing="tight"
+                                                        mt="2"
+                                                    >
+                                                        {product.price}円
+                                                    </Text>
+                                                </Flex>
                                             </Stack>
                                         </Card.Body>
                                         <Card.Footer gap="2">
+                                            <Spacer />
                                             <Link
                                                 to={`/show/${product.id}`}
                                             >
@@ -113,7 +119,7 @@ const Index = () => {
                                                     variant="solid"
                                                     width="full"
                                                 >
-                                                    投稿を見る
+                                                    商品を見る
                                                 </Button>
                                             </Link>
                                         </Card.Footer>

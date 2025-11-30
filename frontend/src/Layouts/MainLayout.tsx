@@ -1,4 +1,3 @@
-// import React, { FC } from "react";
 import type { FC, ReactNode } from "react";
 import { useContext, useEffect } from "react";
 import {
@@ -6,22 +5,11 @@ import {
     Image,
     Flex,
     Spacer,
-    // Menu,
-    // Portal,
-    // Button,
     Center,
     Text,
-    // MenuList,
-    // MenuItem,
-    // MenuButton,
     Menu,
     Portal,
-    Link as ChakraLink,
-    Button,
-    // useStatStyles,
-    // Button,
 } from "@chakra-ui/react";
-// import { usePage, Link } from "@inertiajs/react";
 import { AuthContext } from "@/App";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom"
@@ -34,7 +22,7 @@ interface MainLayoutProps {
 }
 
 const MainLayout: FC<MainLayoutProps> = ({ children }) => {
-    // const { auth } = usePage().props;
+
     const { loading, isSignedIn, setIsSignedIn } = useContext(AuthContext);
     const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
     const navigate = useNavigate()
@@ -53,8 +41,7 @@ const MainLayout: FC<MainLayoutProps> = ({ children }) => {
         fetchAvatar();
     }, [avatarUrl])
 
-    const handleSignOut = async (e: React.MouseEvent<HTMLButtonElement>) => {
-        e.preventDefault();
+    const handleSignOut = async () => {
 
         try {
             const res = await signOut()
@@ -82,45 +69,41 @@ const MainLayout: FC<MainLayoutProps> = ({ children }) => {
             if (isSignedIn) {
                 return (
                     <>
-                        <Menu.Item value="プロフィール">
+                        <Menu.Item value="プロフィール" asChild cursor={"pointer"}>
                             <a href="/auth/profile" rel="noreferrer">
                                 プロフィール
                             </a>
                         </Menu.Item>
-                        <Menu.Item value="新規投稿">
+                        <Menu.Item value="新規投稿" asChild cursor={"pointer"}>
                             <a href="/create" rel="noreferrer">
                                 新規投稿
                             </a>
                         </Menu.Item>
-                        <Menu.Item value="カート">
+                        <Menu.Item value="カート" asChild cursor={"pointer"}>
                             <a href="/cart/index" rel="noreferrer">
                                 カート
                             </a>
                         </Menu.Item>
-                        <Menu.Item value="購入済み">
+                        <Menu.Item value="購入済み" asChild cursor={"pointer"}>
                             <a href="/orders" rel="noreferrer">
                                 購入済み
                             </a>
                         </Menu.Item>
-                        <Menu.Item value="ログアウト">
-                            <Button
-                                as="button"
-                                onClick={handleSignOut}
-                            >ログアウト
-                            </Button>
+                        <Menu.Item value="ログアウト" cursor={"pointer"} onClick={handleSignOut}>
+                            ログアウト
                         </Menu.Item>
                     </>
                 )
             } else {
                 return (
                     <>
-                        <Menu.Item value="ユーザー登録" asChild>
-                            <a href="/register" target="_blank" rel="noreferrer">
+                        <Menu.Item value="ユーザー登録" asChild cursor={"pointer"}>
+                            <a href="/register" rel="noreferrer">
                                 ユーザー登録
                             </a>
                         </Menu.Item>
-                        <Menu.Item value="ログイン" asChild>
-                            <a href="/login" target="_blank" rel="noreferrer">
+                        <Menu.Item value="ログイン" asChild cursor={"pointer"}>
+                            <a href="/login" rel="noreferrer">
                                 ログイン
                             </a>
                         </Menu.Item>
@@ -135,7 +118,7 @@ const MainLayout: FC<MainLayoutProps> = ({ children }) => {
         <div>
             {/* ヘッダー */}
             <Box
-                background="gray.700"
+                background="black"
                 width="100%"
                 h="100px"
                 pr="4"
@@ -143,14 +126,14 @@ const MainLayout: FC<MainLayoutProps> = ({ children }) => {
                 <Flex h="100%">
                     <Spacer />
                     <Center h="100%">
-                        <ChakraLink href="/">
-                            <Image
-                                height="100px"
-                                objectFit="contain"
-                                src="/header_logo.png"
-                                alt="logo"
-                            />
-                        </ChakraLink>
+                        <Image
+                            height="100px"
+                            objectFit="contain"
+                            src="/header_logo.png"
+                            alt="logo"
+                            onClick={() => navigate("/")}
+                            cursor={"pointer"}
+                        />
                     </Center>
                     <Spacer />
                     <Menu.Root>
@@ -191,7 +174,8 @@ const MainLayout: FC<MainLayoutProps> = ({ children }) => {
 
             {/* メイン */}
             <Box
-                minH="calc(100vh - 200px)" // ヘッダー100 + フッター100 を除いた高さ
+                minH="calc(100vh - 200px)"
+                bgImage={`url(/background_image.png)`}
                 display="flex"
                 alignItems="center"
                 justifyContent="center"
@@ -205,7 +189,7 @@ const MainLayout: FC<MainLayoutProps> = ({ children }) => {
 
             {/* フッター */}
             <Box
-                background="gray.700"
+                background="black"
                 width="100%"
                 h="100px"
                 padding="4"

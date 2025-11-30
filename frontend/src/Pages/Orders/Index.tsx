@@ -12,6 +12,7 @@ import {
     Card,
     Heading,
     VStack,
+    Spacer,
 } from "@chakra-ui/react";
 import MainLayout from "@/Layouts/MainLayout";
 import Pagination from "@mui/material/Pagination";
@@ -54,8 +55,8 @@ const Index = () => {
                     <Text>まだ何も購入していません。</Text>
                 ) : (
                     <VStack>
-                        <HStack w="85%">
-                            <Wrap mt="10" justify="center">
+                        <HStack w="100%">
+                            <Wrap mt="10" justify="center" gap={8}>
                                 {visibleItems.map((orderItem, i) => (
                                     <WrapItem key={i+1} w="360px">
                                         <Card.Root>
@@ -81,6 +82,7 @@ const Index = () => {
                                             </Card.Body>
 
                                             <Card.Footer>
+                                                <Spacer />
                                                 <Link to={`/show/${orderItem.product.id}`}>
                                                     <Button>商品ページ</Button>
                                                 </Link>

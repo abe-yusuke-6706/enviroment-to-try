@@ -10,6 +10,7 @@ import {
     Center,
     WrapItem,
     Card,
+    Spacer,
     Heading,
     VStack,
 } from "@chakra-ui/react";
@@ -57,12 +58,15 @@ const Index = () => {
                     <Text>まだ何もカートに追加していません。</Text>
                 ) : (
                     <VStack>
-                        <HStack w="85%">
-                            <Wrap mt="10" justify="center">
+                        <HStack w="100%">
+                            <Wrap mt="10" justify="center" gap={8}>
                                 {cartItems.map((cartItem) => (
                                     <WrapItem key={cartItem.product.id} w="360px">
                                         <Card.Root
                                             key={cartItem.product.id}
+                                            overflow="hidden"
+                                            height="500px"
+                                            width="400px"
                                         >
                                             <Card.Body>
                                                 <Box mx="-6" mt="-6">
@@ -86,6 +90,7 @@ const Index = () => {
                                             </Card.Body>
 
                                             <Card.Footer>
+                                                <Spacer />
                                                 <Link to={`/show/${cartItem.product.id}`}>
                                                     <Button>商品ページ</Button>
                                                 </Link>
@@ -96,6 +101,7 @@ const Index = () => {
                             </Wrap>
                         </HStack>
                         <Button
+                            mt={5}
                             variant="solid"
                             onClick={handleSubmit}>
                             確認する

@@ -125,19 +125,19 @@ const Show = () => {
 
 
                             {/* タイトル＆説明 */}
-                            <Heading size="lg">{product?.name}</Heading>
-                            <Text className="line-clamp-2">
+                            <Heading size="lg" my={5}>{product?.name}</Heading>
+                            <Card.Description mb={5}>
                                 {product?.description}
-                            </Text>
-                            <Text
-                                textStyle="2xl"
-                                fontWeight="medium"
-                                letterSpacing="tight"
-                                mt="2"
-                            >
-                                {product?.price}
-                            </Text>
+                            </Card.Description>
                             <Flex>
+                                <Text
+                                    textStyle="2xl"
+                                    fontWeight="medium"
+                                    letterSpacing="tight"
+                                    mr={5}
+                                >
+                                    {product?.price}円
+                                </Text>
                                 <NumberInput.Root defaultValue="1" unstyled spinOnPress={false} onValueChange={(value) => setQuantity(value.valueAsNumber)}>
                                     <HStack gap="2">
                                         <NumberInput.DecrementTrigger asChild>
