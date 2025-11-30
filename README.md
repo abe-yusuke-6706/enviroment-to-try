@@ -6,4 +6,4 @@
 * **フロントエンド**: React 18 (SPA, TypeScript)
 * **UIフレームワーク**: Chakra UI v3
 * **スタイリング**: Tailwind CSS
-* * **DB**: MySQL
+* **DB**: MySQL
