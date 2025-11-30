@@ -1,20 +1,23 @@
-// import InputError from "@/components/InputError";
 import InputLabel from "@/components/InputLabel";
-// import PrimaryButton from "@/components/PrimaryButton";
 import TextInput from "@/components/TextInput";
-// import { Head, Link, useForm, usePage, router } from "@inertiajs/react";
 import MainLayout from "@/Layouts/MainLayout";
-// import GetCSRFToken from "@/Features/csrf";
 import { useState, } from "react";
-// import GuestLayout from "@/Layouts/GuestLayout";
 import type { SignUpParams } from "@/interfaces/auth";
 import { Link, useNavigate } from "react-router-dom";
-import { Button } from "@chakra-ui/react";
 import Cookies from "js-cookie";
 import { signUp } from "@/lib/api/auth";
+import {
+    Input,
+    Button,
+    Field,
+    Stack,
+    Card,
+    Center,
+    Spacer,
+} from "@chakra-ui/react";
 
 export default function Register() {
-    // const { csrf_token } = usePage<csrfToken>().props;
+
     const [name, setName] = useState<string>("")
     const [email, setEmail] = useState<string>("")
     const [password, setPassword] = useState<string>("")
@@ -52,102 +55,64 @@ export default function Register() {
 
     return (
         <MainLayout>
-            <div className="flex min-h-screen flex-col items-center pt-6 sm:justify-center sm:pt-0">
-                <div className="mt-6 w-full overflow-hidden bg-white px-6 py-4 shadow-md sm:max-w-md sm:rounded-lg">
-
-                    <form>
-                        <div>
-                            <InputLabel htmlFor="name" value="名前" />
-
-                            <TextInput
-                                id="name"
-                                name="name"
-                                value={name}
-                                className="mt-1 block w-full"
-                                autoComplete="name"
-                                isFocused={true}
-                                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                                    setName(e.target.value)}
-                                required
-                            />
-
-                        </div>
-
-                        <div className="mt-4">
-                            <InputLabel
-                                htmlFor="email"
-                                value="メールアドレス"
-                            />
-
-                            <TextInput
-                                id="email"
-                                type="email"
-                                name="email"
-                                value={email}
-                                className="mt-1 block w-full"
-                                autoComplete="username"
-                                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                                    setEmail(e.target.value)}
-                                required
-                            />
-
-                        </div>
-
-                        <div className="mt-4">
-                            <InputLabel htmlFor="password" value="パスワード" />
-
-                            <TextInput
-                                id="password"
-                                type="password"
-                                name="password"
-                                value={password}
-                                className="mt-1 block w-full"
-                                autoComplete="new-password"
-                                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                                    setPassword(e.target.value)}
-                                required
-                            />
-
-                        </div>
-
-                        <div className="mt-4">
-                            <InputLabel
-                                htmlFor="password_confirmation"
-                                value="パスワード確認用"
-                            />
-
-                            <TextInput
-                                id="password_confirmation"
-                                type="password"
-                                name="password_confirmation"
-                                value={passwordConfirmation}
-                                className="mt-1 block w-full"
-                                autoComplete="new-password"
-                                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                                    setPasswordConfirmation(e.target.value)}
-                                required
-                            />
-
-                        </div>
-
-                        <div className="mt-4 flex items-center justify-end">
-                            <Link
-                                to="/login"
-                                className="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                            >
-                                すでに登録済みですか？
-                            </Link>
-
-                            <Button
-                                className="ms-4"
-                                onClick={handleSubmit}
-                            >
-                                登録
-                            </Button>
-                        </div>
-                    </form>
-                </div>
-            </div>
+            <Center>
+                <Card.Root maxW="2xl" w="full">
+                    <Card.Header>
+                        <Card.Title>ログイン画面</Card.Title>
+                        <Card.Description>
+                            下記にユーザー情報を入力してください。
+                        </Card.Description>
+                    </Card.Header>
+                    <Card.Body>
+                        <Stack gap="4" w="full">
+                            <Field.Root>
+                                <Field.Label>名前</Field.Label>
+                                <Input name="name"
+                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                                        setName(e.target.value)
+                                    }
+                                    required />
+                            </Field.Root>
+                            <Field.Root>
+                                <Field.Label>メールアドレス</Field.Label>
+                                <Input name="email"
+                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                                        setEmail(e.target.value)
+                                    }
+                                    required />
+                            </Field.Root>
+                            <Field.Root>
+                                <Field.Label>パスワード</Field.Label>
+                                <Input name="password"
+                                    type="password"
+                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                                        setPassword(e.target.value)
+                                    }
+                                    required />
+                            </Field.Root>
+                            <Field.Root>
+                                <Field.Label>パスワード確認用</Field.Label>
+                                <Input
+                                    name="password_confirmation"
+                                    type="password"
+                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                                        setPasswordConfirmation(e.target.value)
+                                    }
+                                    required />
+                            </Field.Root>
+                        </Stack>
+                    </Card.Body>
+                    <Card.Footer justifyContent="flex-end">
+                        <Button variant="outline" onClick={() => navigate(-1)}>キャンセル</Button>
+                        <Spacer />
+                        <Button
+                            variant="solid"
+                            onClick={handleSubmit}>
+                            ログイン
+                        </Button>
+                    </Card.Footer>
+                </Card.Root>
+            </Center>
         </MainLayout>
     );
 }

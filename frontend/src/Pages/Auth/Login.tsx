@@ -1,22 +1,26 @@
-import Checkbox from "@/components/Checkbox";
-import InputLabel from "@/components/InputLabel";
-import TextInput from "@/components/TextInput";
 import MainLayout from "@/Layouts/MainLayout";
 import { useState, useContext } from "react";
 import type { SignInParams } from "@/interfaces/auth";
-import { Button } from "@chakra-ui/react";
 import { signIn } from "@/lib/api/auth";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import { AuthContext } from "@/App";
+import {
+    Input,
+    Button,
+    Field,
+    Stack,
+    Card,
+    Center,
+    Spacer,
+} from "@chakra-ui/react";
 
-export default function Login({ status }: { status?: string }) {
+export default function Login() {
     const navigate = useNavigate()
     const { setIsSignedIn, setCurrentUser } = useContext(AuthContext)
 
     const [email, setEmail] = useState<string>("")
     const [password, setPassword] = useState<string>("")
-    const [remember, setRemember] = useState<boolean>(false)
 
     const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
@@ -36,7 +40,7 @@ export default function Login({ status }: { status?: string }) {
 
                 setIsSignedIn(true)
                 setCurrentUser(res.data.data)
-            
+
                 navigate("/")
             } else {
                 console.log("failed login")
@@ -49,80 +53,46 @@ export default function Login({ status }: { status?: string }) {
 
     return (
         <MainLayout>
-            <div className="flex min-h-screen flex-col items-center pt-6 sm:justify-center sm:pt-0">
-                <div className="mt-6 w-full overflow-hidden bg-white px-6 py-4 shadow-md sm:max-w-md sm:rounded-lg">
-
-                    {status && (
-                        <div className="mb-4 text-sm font-medium text-green-600">
-                            {status}
-                        </div>
-                    )}
-
-                    <form>
-                        <div>
-                            <InputLabel
-                                htmlFor="email"
-                                value="メールアドレス"
-                            />
-
-                            <TextInput
-                                id="email"
-                                type="email"
-                                name="email"
-                                value={email}
-                                className="mt-1 block w-full"
-                                autoComplete="username"
-                                isFocused={true}
-                                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                                    setEmail(e.target.value)
-                                }
-                            />
-
-                        </div>
-
-                        <div className="mt-4">
-                            <InputLabel htmlFor="password" value="パスワード" />
-
-                            <TextInput
-                                id="password"
-                                type="password"
-                                name="password"
-                                value={password}
-                                className="mt-1 block w-full"
-                                autoComplete="current-password"
-                                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                                    setPassword(e.target.value)
-                                }
-                            />
-                        </div>
-
-                        <div className="mt-4 block">
-                            <label className="flex items-center">
-                                <Checkbox
-                                    name="remember"
-                                    checked={remember}
+            <Center>
+                <Card.Root maxW="2xl" w="full">
+                    <Card.Header>
+                        <Card.Title>ログイン画面</Card.Title>
+                        <Card.Description>
+                            下記にユーザー情報を入力してください。
+                        </Card.Description>
+                    </Card.Header>
+                    <Card.Body>
+                        <Stack gap="4" w="full">
+                            <Field.Root>
+                                <Field.Label>メールアドレス</Field.Label>
+                                <Input name="email"
                                     onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                                        setRemember(e.target.checked)
+                                        setEmail(e.target.value)
                                     }
-                                />
-                                <span className="ms-2 text-sm text-gray-600">
-                                    Remember me
-                                </span>
-                            </label>
-                        </div>
-
-                        <div className="mt-4 flex items-center justify-end">
-
-                            <Button
-                                className="ms-4"
-                                onClick={handleSubmit}
-                            >
-                                ログイン
-                            </Button>
-                        </div>
-                    </form>
-                </div>
-            </div>
+                                    required />
+                            </Field.Root>
+                            <Field.Root>
+                                <Field.Label>パスワード</Field.Label>
+                                <Input name="password"
+                                    type="password"
+                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                                        setPassword(e.target.value)
+                                    }
+                                    required />
+                            </Field.Root>
+                        </Stack>
+                    </Card.Body>
+                    <Card.Footer justifyContent="flex-end">
+                        <Button variant="outline" onClick={() => navigate(-1)}>キャンセル</Button>
+                        <Spacer />
+                        <Button
+                            variant="solid"
+                            onClick={handleSubmit}>
+                            ログイン
+                        </Button>
+                    </Card.Footer>
+                </Card.Root>
+            </Center>
         </MainLayout>
     );
 }
