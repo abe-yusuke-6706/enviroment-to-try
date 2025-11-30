@@ -1,33 +1,18 @@
 import Checkbox from "@/components/Checkbox";
-// import InputError from "@/components/InputError";
 import InputLabel from "@/components/InputLabel";
-// import PrimaryButton from "@/components/PrimaryButton";
 import TextInput from "@/components/TextInput";
-// import GuestLayout from '@/Layouts/GuestLayout';
 import MainLayout from "@/Layouts/MainLayout";
-// import { Head, Link, useForm } from "@inertiajs/react";
-import { useState } from "react";
-// interface LoginProps {
-//     status?: string,
-// }
-// import type { focusRefProps } from "@/components/TextInput";
+import { useState, useContext } from "react";
 import type { SignInParams } from "@/interfaces/auth";
 import { Button } from "@chakra-ui/react";
 import { signIn } from "@/lib/api/auth";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
-import { useContext } from "react";
 import { AuthContext } from "@/App";
 
 export default function Login({ status }: { status?: string }) {
-    // const { data, setData, post, processing, errors, reset } = useForm({
-    //     email: "",
-    //     password: "",
-    //     remember: false,
-    // });
-    const { setIsSignedIn, setCurrentUser } = useContext(AuthContext)
-
     const navigate = useNavigate()
+    const { setIsSignedIn, setCurrentUser } = useContext(AuthContext)
 
     const [email, setEmail] = useState<string>("")
     const [password, setPassword] = useState<string>("")
@@ -40,13 +25,9 @@ export default function Login({ status }: { status?: string }) {
             const formData: SignInParams = {
                 email: email,
                 password: password,
-                // remember: remember,
             }
 
-            console.log("サインイン開始");
             const res = await signIn(formData);
-            console.log(res)
-            console.log("サインイン終了");
 
             if (res.status == 200) {
                 Cookies.set("_access_token", res.headers["access-token"])
@@ -55,11 +36,10 @@ export default function Login({ status }: { status?: string }) {
 
                 setIsSignedIn(true)
                 setCurrentUser(res.data.data)
-                console.log("ログイン成功");
-                
+            
                 navigate("/")
             } else {
-                console.log("ログイン失敗")
+                console.log("failed login")
             }
 
         } catch (err) {
@@ -67,21 +47,10 @@ export default function Login({ status }: { status?: string }) {
         }
     }
 
-    // const submit = (e: React.FormEvent<HTMLFormElement>) => {
-    //     e.preventDefault();
-
-    //     // post(route("login"), {
-    //     //     onFinish: () => reset("password"),
-    //     // });
-    // };
-
-    // const emailRef = useRef<focusRefProps>(null);
-
     return (
         <MainLayout>
             <div className="flex min-h-screen flex-col items-center pt-6 sm:justify-center sm:pt-0">
                 <div className="mt-6 w-full overflow-hidden bg-white px-6 py-4 shadow-md sm:max-w-md sm:rounded-lg">
-                    {/* <Head title="ログイン" /> */}
 
                     {status && (
                         <div className="mb-4 text-sm font-medium text-green-600">
@@ -107,13 +76,8 @@ export default function Login({ status }: { status?: string }) {
                                 onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                                     setEmail(e.target.value)
                                 }
-                            // ref={emailRef}
                             />
 
-                            {/* <InputError
-                                message={errors.email}
-                                className="mt-2"
-                            /> */}
                         </div>
 
                         <div className="mt-4">
@@ -130,11 +94,6 @@ export default function Login({ status }: { status?: string }) {
                                     setPassword(e.target.value)
                                 }
                             />
-
-                            {/* <InputError
-                                message={errors.password}
-                                className="mt-2"
-                            /> */}
                         </div>
 
                         <div className="mt-4 block">
@@ -157,7 +116,6 @@ export default function Login({ status }: { status?: string }) {
                             <Button
                                 className="ms-4"
                                 onClick={handleSubmit}
-                            // disabled={processing}
                             >
                                 ログイン
                             </Button>

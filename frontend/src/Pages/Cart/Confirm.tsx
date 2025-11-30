@@ -11,6 +11,9 @@ import {
     Card,
     Heading,
     VStack,
+    Portal,
+    Dialog,
+    CloseButton,
 } from "@chakra-ui/react";
 import MainLayout from "@/Layouts/MainLayout";
 import { Link } from "react-router-dom";
@@ -88,21 +91,37 @@ const Confirm = () => {
                             ))}
                         </Wrap>
                     </HStack>
-                    {/* <Card.Root p={3} mt={10} borderRadius="3xl">
-                        <Pagination
-                            count={maxPagination}
-                            variant="outlined"
-                            color="primary"
-                            onChange={(_e, page: number) => setPaginationPage(page)}
-                            page={paginationPage}
-                        />
-                    </Card.Root> */}
-
-                    <Button
-                        variant="solid"
-                        onClick={handleSubmit}>
-                        確認する
-                    </Button>
+                    <Dialog.Root>
+                        <Dialog.Trigger asChild>
+                            <Button variant="solid">購入する</Button>
+                        </Dialog.Trigger>
+                        <Portal>
+                            <Dialog.Backdrop />
+                            <Dialog.Positioner>
+                                <Dialog.Content>
+                                    <Dialog.Header>
+                                        <Dialog.Title>確認</Dialog.Title>
+                                    </Dialog.Header>
+                                    <Dialog.Body>
+                                        <p>
+                                            購入を確定します。
+                                        </p>
+                                    </Dialog.Body>
+                                    <Dialog.Footer>
+                                        <Dialog.ActionTrigger asChild>
+                                            <Button variant="solid">キャンセル</Button>
+                                        </Dialog.ActionTrigger>
+                                        <Button onClick={handleSubmit}>
+                                            購入する
+                                        </Button>
+                                    </Dialog.Footer>
+                                    <Dialog.CloseTrigger asChild>
+                                        <CloseButton size="sm" />
+                                    </Dialog.CloseTrigger>
+                                </Dialog.Content>
+                            </Dialog.Positioner>
+                        </Portal>
+                    </Dialog.Root>
                 </VStack>
             </Center>
         </MainLayout>

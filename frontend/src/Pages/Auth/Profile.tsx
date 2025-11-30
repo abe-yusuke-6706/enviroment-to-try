@@ -21,7 +21,6 @@ export default function Profile() {
 
                 setAvatarUrl(resAvatar.data.avatarUrl);
                 setName(res.data.name);
-                console.log(name);
                 setEmail(res.data.email);
             } catch (error) {
                 console.log(error);
@@ -95,7 +94,6 @@ export default function Profile() {
                         </Center>
                     </Card.Body>
 
-                    {/* <Center> */}
                     <Card.Footer gap="2">
                         <Button variant="ghost" onClick={() => navigate(-1)}>
                             戻る
@@ -108,7 +106,6 @@ export default function Profile() {
                             編集
                         </Button>
                     </Card.Footer>
-                    {/* </Center> */}
                 </Card.Root>
             </Center>
         </MainLayout>

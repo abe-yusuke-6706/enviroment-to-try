@@ -1,5 +1,5 @@
 import MainLayout from "@/Layouts/MainLayout";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
     Input,
     Button,
@@ -23,15 +23,22 @@ const Create = () => {
     const [images, setImages] = useState<File[] | null>(null);
     const [price, setPrice] = useState<number>(0);
     const [description, setDescription] = useState<string>("");
-    const [stock, setStock] = useState<number>(0);
+    const [stock, setStock] = useState<number>(1);
 
-    useEffect(() => {
-        console.log(stock);
-    }, [stock])
+    const isDataInvalid = (
+        !name ||
+        !description ||
+        price === undefined || price === null || price <= 0 || isNaN(price) ||
+        images === null
+    );
 
     const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault()
 
+        if (isDataInvalid) {
+            navigate("/create");
+            return null;
+        }
         navigate("/confirm", {
             state: {
                 name: name,
@@ -84,7 +91,7 @@ const Create = () => {
                             </Field.Root>
                             <Field.Root>
                                 <Field.Label>在庫数</Field.Label>
-                                <NumberInput.Root defaultValue="3" unstyled spinOnPress={false} onValueChange={(value) => setStock(value.valueAsNumber)}>
+                                <NumberInput.Root defaultValue="1" unstyled spinOnPress={false} onValueChange={(value) => setStock(value.valueAsNumber)}>
                                     <HStack gap="2">
                                         <NumberInput.DecrementTrigger asChild>
                                             <IconButton variant="outline" size="sm">
@@ -118,7 +125,7 @@ const Create = () => {
                         </Stack>
                     </Card.Body>
                     <Card.Footer justifyContent="flex-end">
-                        <Button variant="outline">キャンセル</Button>
+                        <Button variant="outline" onClick={() => navigate(-1)}>キャンセル</Button>
                         <Button
                             variant="solid"
                             onClick={handleSubmit}>

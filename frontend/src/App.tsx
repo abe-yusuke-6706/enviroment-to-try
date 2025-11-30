@@ -1,16 +1,7 @@
 import { useState, useEffect, createContext } from "react";
-import { Routes, Route } from "react-router-dom";
-// import Home from "./Pages/Home";
-import Login from "./Pages/Auth/Login";
-import Register from "./Pages/Auth/Register";
-import Test from "./Pages/Test";
-// const root = document.getElementById("root")!;
-import Index from "./Pages/Product/Index";
-// import Show from "./Pages/Product/Show";
-import Create from "./Pages/Product/Create";
 import { getCurrentUser } from "./lib/api/auth";
 import type { User } from "./interfaces";
-import { Navigate } from "react-router-dom";
+import { Navigate, Outlet, Routes, Route } from "react-router-dom";
 import Show from "./Pages/Product/Show";
 import Confirm from "./Pages/Product/Confirm";
 import ProductEdit from "./Pages/Product/Edit";
@@ -19,6 +10,11 @@ import ProfileEdit from "./Pages/Auth/Edit";
 import CartIndex from "./Pages/Cart/Index";
 import CartConfirm from "./Pages/Cart/Confirm";
 import OrderIndex from "./Pages/Orders/Index";
+import Login from "./Pages/Auth/Login";
+import Register from "./Pages/Auth/Register";
+import Test from "./Pages/Test";
+import Index from "./Pages/Product/Index";
+import Create from "./Pages/Product/Create";
 
 export const AuthContext = createContext({} as {
   loading: boolean
@@ -30,50 +26,56 @@ export const AuthContext = createContext({} as {
 })
 
 const App = () => {
-  const [loading, setLoading] = useState<boolean>(true)
-  const [isSignedIn, setIsSignedIn] = useState<boolean>(false)
-  const [currentUser, setCurrentUser] = useState<User | undefined>()
+  const [loading, setLoading] = useState<boolean>(true);
+  const [isSignedIn, setIsSignedIn] = useState<boolean>(false);
+  const [currentUser, setCurrentUser] = useState<User | undefined>();
 
-  // 認証済みのユーザーがいるかどうかチェック
-  // 確認できた場合はそのユーザーの情報を取得
   const handleGetCurrentUser = async () => {
     try {
-      const res = await getCurrentUser()
+      const res = await getCurrentUser();
+      const resData = res as { data: { isLogin: boolean; data: User } };
 
-      if (res?.data.isLogin === true) {
-        setIsSignedIn(true)
-        setCurrentUser(res?.data.data)
-
-        console.log("current user activate")
-        console.log(res?.data.data)
-      } else {
-        console.log("No current user")
+      if (resData.data.isLogin === true) {
+        setIsSignedIn(true);
+        setCurrentUser(resData.data.data);
       }
     } catch (err) {
-      console.log(err)
+      console.error("認証情報の取得中にエラーが発生しました:", err);
     }
 
-    setLoading(false)
-  }
+    setLoading(false);
+  };
 
   useEffect(() => {
-    handleGetCurrentUser()
-  }, [])
+    handleGetCurrentUser();
+  }, []);
 
-
-  // ユーザーが認証済みかどうかでルーティングを決定
-  // 未認証だった場合は「/signin」ページに促す
-  const Private = ({ children }: { children: React.ReactElement }) => {
-    if (!loading) {
-      if (isSignedIn) {
-        return children
-      } else {
-        return <Navigate to="/login" replace />;
-      }
-    } else {
-      return <></>
+  const Private = () => {
+    if (loading) {
+      return <div className="text-center py-10">ロード中...</div>;
     }
-  }
+
+    if (isSignedIn) {
+      return <Outlet />; 
+
+    } else {
+      return <Navigate to="/login" replace />;
+    }
+  };
+
+  const Guest = () => {
+    if (loading) {
+      return <div className="text-center py-10">ロード中...</div>;
+    }
+
+    if (isSignedIn) {
+      return <Navigate to="/" replace />;
+
+    } else {
+      return <Outlet />;
+    }
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -87,79 +89,29 @@ const App = () => {
     >
       <Routes>
         <Route path="/" element={<Index />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/login" element={<Login />} />
+        <Route path="/show/:id" element={<Show />} />
         <Route path="/test" element={<Test />} />
-        <Route path="/show/:id" element={<Show />}></Route>
 
-        <Route
-          path="/create"
-          element={
-            <Private>
-              <Create />
-            </Private>
-          }
-        />
-        <Route
-          path="/confirm"
-          element={
-            <Private>
-              <Confirm />
-            </Private>
-          }
-        />
-        <Route
-          path="/edit/:id"
-          element={
-            <Private>
-              <ProductEdit />
-            </Private>
-          }
-        />
-        <Route
-          path="/auth/profile"
-          element={
-            <Private>
-              <Profile />
-            </Private>
-          }
-        />
-        <Route
-          path="/auth/profile/edit"
-          element={
-            <Private>
-              <ProfileEdit />
-            </Private>
-          }
-        />
-        <Route
-          path="/cart/index"
-          element={
-            <Private>
-              <CartIndex />
-            </Private>
-          }
-        />
-        <Route
-          path="/cart/confirm"
-          element={
-            <Private>
-              <CartConfirm />
-            </Private>
-          }
-        />
-        <Route
-          path="/orders"
-          element={
-            <Private>
-              <OrderIndex />
-            </Private>
-          }
-        />
+        <Route element={<Guest />}>
+          <Route path="/register" element={<Register />} />
+          <Route path="/login" element={<Login />} />
+        </Route>
+
+        <Route element={<Private />}>
+          <Route path="/create" element={<Create />} />
+          <Route path="/confirm" element={<Confirm />} />
+          <Route path="/edit/:id" element={<ProductEdit />} />
+
+          <Route path="/auth/profile" element={<Profile />} />
+          <Route path="/auth/profile/edit" element={<ProfileEdit />} />
+
+          <Route path="/cart/index" element={<CartIndex />} />
+          <Route path="/cart/confirm" element={<CartConfirm />} />
+          <Route path="/orders" element={<OrderIndex />} />
+        </Route>
       </Routes>
     </AuthContext.Provider>
-
-  )
+  );
 };
 
 export default App;

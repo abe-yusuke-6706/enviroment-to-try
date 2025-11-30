@@ -60,13 +60,12 @@ const MainLayout: FC<MainLayoutProps> = ({ children }) => {
             const res = await signOut()
 
             if (res.data.success === true) {
-                // サインアウト時には各Cookieを削除
                 Cookies.remove("_access_token")
                 Cookies.remove("_client")
                 Cookies.remove("_uid")
 
                 setIsSignedIn(false)
-                navigate("/login")
+                navigate("/")
 
                 console.log("Succeeded in sign out")
             } else {
@@ -78,8 +77,7 @@ const MainLayout: FC<MainLayoutProps> = ({ children }) => {
     }
 
     const AuthButtons = () => {
-        // 認証完了後はサインアウト用のボタンを表示
-        // 未認証時は認証用のボタンを表示
+
         if (!loading) {
             if (isSignedIn) {
                 return (
@@ -100,15 +98,13 @@ const MainLayout: FC<MainLayoutProps> = ({ children }) => {
                             </a>
                         </Menu.Item>
                         <Menu.Item value="購入済み">
-                            <a href="/order/index" rel="noreferrer">
+                            <a href="/orders" rel="noreferrer">
                                 購入済み
                             </a>
                         </Menu.Item>
                         <Menu.Item value="ログアウト">
                             <Button
                                 as="button"
-                                // href=""
-                                // method="post"
                                 onClick={handleSignOut}
                             >ログアウト
                             </Button>
@@ -151,7 +147,7 @@ const MainLayout: FC<MainLayoutProps> = ({ children }) => {
                             <Image
                                 height="100px"
                                 objectFit="contain"
-                                src="../header_logo.png"
+                                src="/header_logo.png"
                                 alt="logo"
                             />
                         </ChakraLink>
@@ -173,7 +169,7 @@ const MainLayout: FC<MainLayoutProps> = ({ children }) => {
                                         />
                                     ) : (
                                         <Image
-                                            src="../user_icon.png"
+                                            src="/user_icon.png"
                                             height="100px"
                                             objectFit="contain"
                                             alt="logo"
@@ -220,7 +216,7 @@ const MainLayout: FC<MainLayoutProps> = ({ children }) => {
                         <Image
                             height="120%"
                             objectFit="contain"
-                            src="../header_logo.png"
+                            src="/header_logo.png"
                             alt="logo"
                         />
                     </Center>

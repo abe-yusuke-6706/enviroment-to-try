@@ -38,7 +38,7 @@ const Show = () => {
     const [product, setProduct] = useState<Product | null>(null);
     const [createdUserId, setCreatedUserId] = useState<number>(0);
     const [currentUserId, setCurrentUserId] = useState<number>(0)
-    const [quantity, setQuantity] = useState<number>(0);
+    const [quantity, setQuantity] = useState<number>(1);
 
     useEffect(() => {
         const fetchItems = async () => {
@@ -72,7 +72,7 @@ const Show = () => {
                     product_id: product?.id
                 });
 
-                navigate("/");
+                navigate("/cart/index");
             } catch (error) {
                 console.log(error);
             }
@@ -138,7 +138,7 @@ const Show = () => {
                                 {product?.price}
                             </Text>
                             <Flex>
-                                <NumberInput.Root defaultValue="3" unstyled spinOnPress={false} onValueChange={(value) => setQuantity(value.valueAsNumber)}>
+                                <NumberInput.Root defaultValue="1" unstyled spinOnPress={false} onValueChange={(value) => setQuantity(value.valueAsNumber)}>
                                     <HStack gap="2">
                                         <NumberInput.DecrementTrigger asChild>
                                             <IconButton variant="outline" size="sm">

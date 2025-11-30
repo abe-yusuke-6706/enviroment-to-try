@@ -16,7 +16,6 @@ import {
 import MainLayout from "@/Layouts/MainLayout";
 import Pagination from "@mui/material/Pagination";
 import { Link } from "react-router-dom";
-// import axios from "axios";
 import type { CartProduct } from "@/interfaces/product";
 import client from "@/lib/api/client";
 
@@ -51,55 +50,57 @@ const Index = () => {
     return (
         <MainLayout>
             <Center>
-                <VStack>
-                    <HStack w="85%">
-                        <Wrap mt="10" justify="center">
-                            {visibleItems.map((orderItem) => (
-                                <WrapItem key={orderItem.product.id} w="360px">
-                                    <Card.Root
-                                        key={orderItem.product.id}
-                                    >
-                                        <Card.Body>
-                                            <Box mx="-6" mt="-6">
-                                                {orderItem.product.images[0] ? (
-                                                    <Image
-                                                        src={orderItem.product.images[0].url}
-                                                    />
-                                                ) : (
-                                                    <Image src="../nothing_image.png" />
-                                                )}
-                                            </Box>
+                {visibleItems.length == 0 ? (
+                    <Text>まだ何も購入していません。</Text>
+                ) : (
+                    <VStack>
+                        <HStack w="85%">
+                            <Wrap mt="10" justify="center">
+                                {visibleItems.map((orderItem, i) => (
+                                    <WrapItem key={i+1} w="360px">
+                                        <Card.Root>
+                                            <Card.Body>
+                                                <Box mx="-6" mt="-6">
+                                                    {orderItem.product.images[0] ? (
+                                                        <Image
+                                                            src={orderItem.product.images[0].url}
+                                                        />
+                                                    ) : (
+                                                        <Image src="../nothing_image.png" />
+                                                    )}
+                                                </Box>
 
-                                            <Stack mt="6" gap="3">
-                                                <Heading size="lg">
-                                                    {orderItem.product.name}
-                                                </Heading>
-                                                <Text>在庫：{orderItem.product.stock}個</Text>
-                                                <Text>カート内：{orderItem.quantity}個</Text>
-                                                <Text>支払い料金：{orderItem.product.price * orderItem.quantity}円</Text>
-                                            </Stack>
-                                        </Card.Body>
+                                                <Stack mt="6" gap="3">
+                                                    <Heading size="lg">
+                                                        {orderItem.product.name}
+                                                    </Heading>
+                                                    <Text>在庫：{orderItem.product.stock}個</Text>
+                                                    <Text>カート内：{orderItem.quantity}個</Text>
+                                                    <Text>支払い料金：{orderItem.product.price * orderItem.quantity}円</Text>
+                                                </Stack>
+                                            </Card.Body>
 
-                                        <Card.Footer>
-                                            <Link to={`/show/${orderItem.product.id}`}>
-                                                <Button>商品ページ</Button>
-                                            </Link>
-                                        </Card.Footer>
-                                    </Card.Root>
-                                </WrapItem>
-                            ))}
-                        </Wrap>
-                    </HStack>
-                    <Card.Root p={3} mt={10} borderRadius="3xl">
-                        <Pagination
-                            count={maxPagination}
-                            variant="outlined"
-                            color="primary"
-                            onChange={(_e, page: number) => setPaginationPage(page)}
-                            page={paginationPage}
-                        />
-                    </Card.Root>
-                </VStack>
+                                            <Card.Footer>
+                                                <Link to={`/show/${orderItem.product.id}`}>
+                                                    <Button>商品ページ</Button>
+                                                </Link>
+                                            </Card.Footer>
+                                        </Card.Root>
+                                    </WrapItem>
+                                ))}
+                            </Wrap>
+                        </HStack>
+                        <Card.Root p={3} mt={10} borderRadius="3xl">
+                            <Pagination
+                                count={maxPagination}
+                                variant="outlined"
+                                color="primary"
+                                onChange={(_e, page: number) => setPaginationPage(page)}
+                                page={paginationPage}
+                            />
+                        </Card.Root>
+                    </VStack>
+                )}
             </Center>
         </MainLayout>
     );
