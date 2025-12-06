@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Button, FileUpload, Card, Dialog, CloseButton, Portal, Center, Field, Input, Stack } from "@chakra-ui/react";
 import { useNavigate, useLocation } from "react-router-dom";
 import client from "@/lib/api/client";
-import type { LocationAuth } from "@/interfaces/auth";
+import type { LocationAuth } from "@/interfaces/auth.interface";
 import { HiUpload } from "react-icons/hi";
 
 export default function Profile() {

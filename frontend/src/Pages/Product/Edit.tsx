@@ -25,7 +25,7 @@ import { LuMinus, LuPlus } from "react-icons/lu"
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useParams } from "react-router-dom";
-import type { ProductImage } from "@/interfaces/product";
+import type { ProductImage } from "@/interfaces/product.interface";
 import { TiDelete } from "react-icons/ti";
 import client from "@/lib/api/client";
 

@@ -18,7 +18,7 @@ import MainLayout from "@/Layouts/MainLayout";
 // import Pagination from "@mui/material/Pagination";
 import { Link } from "react-router-dom";
 // import axios from "axios";
-import type { CartProduct } from "@/interfaces/product";
+import type { CartProduct } from "@/interfaces/product.interface";
 import client from "@/lib/api/client";
 import { useNavigate } from "react-router-dom";
 

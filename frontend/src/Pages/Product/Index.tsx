@@ -19,7 +19,7 @@ import MainLayout from "@/Layouts/MainLayout";
 import Pagination from "@mui/material/Pagination";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import type { Product } from "@/interfaces/product";
+import type { Product } from "@/interfaces/product.interface";
 
 const Index = () => {
     const [items, setItems] = useState<Product[]>([]);
