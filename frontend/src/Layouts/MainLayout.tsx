@@ -37,9 +37,20 @@ const MainLayout: FC<MainLayoutProps> = ({ children }) => {
         }
     };
 
+    // const payjpScript = () => {
+    //     // if(document.createElement("script")) return;
+
+    //     const script = document.createElement("script");
+    //     script.src = "https://js.pay.jp/v2/pay.js";
+    //     script.async = true;
+
+    //     document.body.append(script);
+    // }
+
     useEffect(() => {
         fetchAvatar();
-    }, [avatarUrl])
+        // payjpScript();
+    }, [])
 
     const handleSignOut = async () => {
 
@@ -74,11 +85,6 @@ const MainLayout: FC<MainLayoutProps> = ({ children }) => {
                                 プロフィール
                             </a>
                         </Menu.Item>
-                        <Menu.Item value="新規投稿" asChild cursor={"pointer"}>
-                            <a href="/create" rel="noreferrer">
-                                新規投稿
-                            </a>
-                        </Menu.Item>
                         <Menu.Item value="カート" asChild cursor={"pointer"}>
                             <a href="/cart/index" rel="noreferrer">
                                 カート
@@ -87,6 +93,16 @@ const MainLayout: FC<MainLayoutProps> = ({ children }) => {
                         <Menu.Item value="購入済み" asChild cursor={"pointer"}>
                             <a href="/orders" rel="noreferrer">
                                 購入済み
+                            </a>
+                        </Menu.Item>
+                        <Menu.Item value="クレジットカード" asChild cursor={"pointer"}>
+                            <a href="/cards" rel="noreferrer">
+                                クレジットカード
+                            </a>
+                        </Menu.Item>
+                        <Menu.Item value="新規投稿" asChild cursor={"pointer"}>
+                            <a href="/create" rel="noreferrer">
+                                新規投稿
                             </a>
                         </Menu.Item>
                         <Menu.Item value="ログアウト" cursor={"pointer"} onClick={handleSignOut}>

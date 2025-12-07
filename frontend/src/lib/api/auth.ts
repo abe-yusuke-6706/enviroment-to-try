@@ -1,7 +1,7 @@
 import client from "./client";
 import Cookies from "js-cookie";
 
-import type { SignInParams, SignUpParams } from "@/interfaces/auth";
+import type { SignInParams, SignUpParams } from "@/interfaces/auth.interface";
 
 export const signUp = (params :SignUpParams) => {
     return client.post("auth", params);

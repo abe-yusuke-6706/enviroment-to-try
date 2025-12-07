@@ -1,9 +1,7 @@
-import InputLabel from "@/components/InputLabel";
-import TextInput from "@/components/TextInput";
 import MainLayout from "@/Layouts/MainLayout";
 import { useState, } from "react";
-import type { SignUpParams } from "@/interfaces/auth";
-import { Link, useNavigate } from "react-router-dom";
+import type { SignUpParams } from "@/interfaces/auth.interface";
+import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import { signUp } from "@/lib/api/auth";
 import {

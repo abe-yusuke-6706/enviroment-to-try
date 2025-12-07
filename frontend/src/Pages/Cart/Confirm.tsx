@@ -14,7 +14,7 @@ import {
 import MainLayout from "@/Layouts/MainLayout";
 import client from "@/lib/api/client";
 import { useNavigate } from "react-router-dom";
-import type { LocationCartProduct } from "@/interfaces/product";
+import type { LocationCartProduct } from "@/interfaces/product.interface";
 import { useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 

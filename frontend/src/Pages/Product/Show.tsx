@@ -24,7 +24,7 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
 import axios from "axios";
-import type { Product, ProductImage } from "@/interfaces/product";
+import type { Product, ProductImage } from "@/interfaces/product.interface";
 import { useParams } from "react-router-dom";
 import { FaPenToSquare } from "react-icons/fa6";
 import client from "@/lib/api/client";

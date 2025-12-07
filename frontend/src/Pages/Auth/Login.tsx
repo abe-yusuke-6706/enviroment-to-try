@@ -1,6 +1,6 @@
 import MainLayout from "@/Layouts/MainLayout";
 import { useState, useContext } from "react";
-import type { SignInParams } from "@/interfaces/auth";
+import type { SignInParams } from "@/interfaces/auth.interface";
 import { signIn } from "@/lib/api/auth";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";

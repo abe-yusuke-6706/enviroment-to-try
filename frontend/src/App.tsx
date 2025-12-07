@@ -1,6 +1,6 @@
 import { useState, useEffect, createContext } from "react";
 import { getCurrentUser } from "./lib/api/auth";
-import type { User } from "./interfaces";
+import type { User } from "./interfaces/index.interface";
 import { Navigate, Outlet, Routes, Route } from "react-router-dom";
 import Show from "./Pages/Product/Show";
 import Confirm from "./Pages/Product/Confirm";
@@ -15,6 +15,9 @@ import Register from "./Pages/Auth/Register";
 import Test from "./Pages/Test";
 import Index from "./Pages/Product/Index";
 import Create from "./Pages/Product/Create";
+import CurrentCard from "./Pages/CreditCard/CurrentCard";
+import CardRegistration from "./Pages/CreditCard/CardRegistration";
+import CardIndex from "./Pages/CreditCard/CardIndex";
 
 export const AuthContext = createContext({} as {
   loading: boolean
@@ -56,7 +59,7 @@ const App = () => {
     }
 
     if (isSignedIn) {
-      return <Outlet />; 
+      return <Outlet />;
 
     } else {
       return <Navigate to="/login" replace />;
@@ -108,6 +111,10 @@ const App = () => {
           <Route path="/cart/index" element={<CartIndex />} />
           <Route path="/cart/confirm" element={<CartConfirm />} />
           <Route path="/orders" element={<OrderIndex />} />
+
+          <Route path="/card/register" element={<CardRegistration />} />
+          <Route path="/card" element={<CurrentCard />} />
+          <Route path="/cards" element={<CardIndex />} />
         </Route>
       </Routes>
     </AuthContext.Provider>

@@ -13,4 +13,6 @@ class User < ActiveRecord::Base
 
   has_many :order_items, dependent: :destroy
   has_many :ordering_products, through: :order_items
+
+  has_many :credit_cards, dependent: :destroy
 end

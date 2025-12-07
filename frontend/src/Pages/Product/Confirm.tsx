@@ -9,7 +9,7 @@ import { LuCheck, LuX } from "react-icons/lu"
 import client from "@/lib/api/client";
 import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
-import type { LocationProduct } from "@/interfaces/product";
+import type { LocationProduct } from "@/interfaces/product.interface";
 
 const Confirm = () => {
 
