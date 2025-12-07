@@ -1,10 +1,6 @@
 import MainLayout from "@/Layouts/MainLayout";
-import { useEffect, useState, useRef } from "react";
-// import type { SignUpParams } from "@/interfaces/auth.interface";
+import { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import Cookies from "js-cookie";
-// import { signUp } from "@/lib/api/auth";
-import type { CreditCard } from "@/interfaces/creditCard.interface";
 import {
     Input,
     Button,
@@ -17,11 +13,6 @@ import {
 import client from "@/lib/api/client";
 
 export default function CardRegistration() {
-
-    const [number, setNumber] = useState<number>(0)
-    const [deadline, setDeadline] = useState<number>(0)
-    const [securityCode, setSecurityCode] = useState<number>(0)
-
     const payjpRef = useRef<any>(null);
     const cardElementRef = useRef<any>(null);
     const isInitialized = useRef(false);
@@ -44,15 +35,8 @@ export default function CardRegistration() {
     const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault()
 
-        // const formData: CreditCard = {
-        //     number: number,
-        //     deadline: deadline,
-        //     securityCode: securityCode,
-        // }
-
         try {
-            // const res = await client.post("credit_cards", formData);
-            // console.log(res)
+            await client.get("auth/sessions");
             payjpRef.current.createToken(cardElementRef.current)
                 .then(async (result: any) => {
                     const cardToken = result.id;
@@ -62,16 +46,9 @@ export default function CardRegistration() {
                     console.log(res);
                 })
                 .catch((err: any) => {
-                    console.log("err:", err);
+                    console.log(err);
+                    console.log(err.response?.data);
                 });
-            // if (res.status === 200) {
-
-            //     Cookies.set("_access_token", res.headers["access-token"])
-            //     Cookies.set("_client", res.headers["client"])
-            //     Cookies.set("_uid", res.headers["uid"])
-
-            //     navigate("/");
-            // }
         } catch (err) {
             console.log(err)
         }
@@ -93,25 +70,25 @@ export default function CardRegistration() {
                             <Field.Root>
                                 <Field.Label>カード番号</Field.Label>
                                 <Input name="number"
-                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                                        setNumber(Number(e.target.value))
-                                    }
+                                    // onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                                    //     setNumber(Number(e.target.value))
+                                    // }
                                     required />
                             </Field.Root>
                             <Field.Root>
                                 <Field.Label>有効期限</Field.Label>
                                 <Input name="deadline"
-                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                                        setDeadline(Number(e.target.value))
-                                    }
+                                    // onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                                    //     setDeadline(Number(e.target.value))
+                                    // }
                                     required />
                             </Field.Root>
                             <Field.Root>
                                 <Field.Label>セキュリティコード</Field.Label>
                                 <Input name="security-code"
-                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                                        setSecurityCode(Number(e.target.value))
-                                    }
+                                    // onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                                    //     setSecurityCode(Number(e.target.value))
+                                    // }
                                     required />
                             </Field.Root>
                         </Stack>

@@ -37,15 +37,15 @@ const MainLayout: FC<MainLayoutProps> = ({ children }) => {
         }
     };
 
-    const payjpScript = () => {
-        // if(document.createElement("script")) return;
+    // const payjpScript = () => {
+    //     // if(document.createElement("script")) return;
 
-        const script = document.createElement("script");
-        script.src = "https://js.pay.jp/v2/pay.js";
-        script.async = true;
+    //     const script = document.createElement("script");
+    //     script.src = "https://js.pay.jp/v2/pay.js";
+    //     script.async = true;
 
-        document.body.append(script);
-    }
+    //     document.body.append(script);
+    // }
 
     useEffect(() => {
         fetchAvatar();
