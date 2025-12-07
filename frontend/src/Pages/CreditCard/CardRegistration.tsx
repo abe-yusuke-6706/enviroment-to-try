@@ -2,10 +2,7 @@ import MainLayout from "@/Layouts/MainLayout";
 import { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import {
-    Input,
     Button,
-    Field,
-    Stack,
     Card,
     Center,
     Spacer,
@@ -40,10 +37,10 @@ export default function CardRegistration() {
             payjpRef.current.createToken(cardElementRef.current)
                 .then(async (result: any) => {
                     const cardToken = result.id;
-                    const res = await client.post("credit_cards", {
+                    await client.post("credit_cards", {
                         credit_card: { card_token: cardToken }
                     });
-                    console.log(res);
+                    navigate("cards")
                 })
                 .catch((err: any) => {
                     console.log(err);
@@ -66,32 +63,6 @@ export default function CardRegistration() {
                         </Card.Description>
                     </Card.Header>
                     <Card.Body id="credit-card-form">
-                        <Stack gap="4" w="full">
-                            <Field.Root>
-                                <Field.Label>カード番号</Field.Label>
-                                <Input name="number"
-                                    // onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                                    //     setNumber(Number(e.target.value))
-                                    // }
-                                    required />
-                            </Field.Root>
-                            <Field.Root>
-                                <Field.Label>有効期限</Field.Label>
-                                <Input name="deadline"
-                                    // onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                                    //     setDeadline(Number(e.target.value))
-                                    // }
-                                    required />
-                            </Field.Root>
-                            <Field.Root>
-                                <Field.Label>セキュリティコード</Field.Label>
-                                <Input name="security-code"
-                                    // onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                                    //     setSecurityCode(Number(e.target.value))
-                                    // }
-                                    required />
-                            </Field.Root>
-                        </Stack>
                     </Card.Body>
                     <Card.Footer justifyContent="flex-end">
                         <Button variant="outline" onClick={() => navigate(-1)}>キャンセル</Button>
@@ -99,7 +70,7 @@ export default function CardRegistration() {
                         <Button
                             variant="solid"
                             onClick={handleSubmit}>
-                            ログイン
+                            登録
                         </Button>
                     </Card.Footer>
                 </Card.Root>

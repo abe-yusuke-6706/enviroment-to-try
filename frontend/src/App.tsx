@@ -17,6 +17,7 @@ import Index from "./Pages/Product/Index";
 import Create from "./Pages/Product/Create";
 import CurrentCard from "./Pages/CreditCard/CurrentCard";
 import CardRegistration from "./Pages/CreditCard/CardRegistration";
+import CardIndex from "./Pages/CreditCard/CardIndex";
 
 export const AuthContext = createContext({} as {
   loading: boolean
@@ -113,6 +114,7 @@ const App = () => {
 
           <Route path="/card/register" element={<CardRegistration />} />
           <Route path="/card" element={<CurrentCard />} />
+          <Route path="/cards" element={<CardIndex />} />
         </Route>
       </Routes>
     </AuthContext.Provider>

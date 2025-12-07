@@ -96,7 +96,7 @@ const MainLayout: FC<MainLayoutProps> = ({ children }) => {
                             </a>
                         </Menu.Item>
                         <Menu.Item value="クレジットカード" asChild cursor={"pointer"}>
-                            <a href="/create" rel="noreferrer">
+                            <a href="/cards" rel="noreferrer">
                                 クレジットカード
                             </a>
                         </Menu.Item>
